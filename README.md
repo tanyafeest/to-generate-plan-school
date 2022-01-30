@@ -1,4 +1,4 @@
-# test
+# sitzplatzplaner
 
 ## Project setup
 ```
