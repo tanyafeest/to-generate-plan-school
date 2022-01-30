@@ -3,7 +3,7 @@ export class Sitzplatz
     x: number;
     y: number;
     marked: boolean;
-    name : string
+    name: string;
     constructor(x: number, y: number, marked: boolean) {
         this.x = x;
         this.y = y;

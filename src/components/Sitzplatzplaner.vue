@@ -28,10 +28,10 @@
   <div class="tafelDivOuter"><div class="tafelDivInner">TAFEL</div></div>
   <div class="sitzplatzdiv">
     <table class="t1">
-      <tr v-for="(_, x) in parseInt(gridHeight)" :key="x">
+      <tr v-for="(_, y) in parseInt(gridHeight)" :key="y">
         <td
-          v-for="(_, y) in parseInt(gridWidth)"
-          :key="y"
+          v-for="(_, x) in parseInt(gridWidth)"
+          :key="x"
           class="t1"
           :style="{ height: 90 / parseInt(gridHeight) /*row.length*/ + 'vh' }"
         >
@@ -76,16 +76,25 @@ export default defineComponent({
   },
   watch: {},
   methods: {
-    onFieldClick(y: number, x: number) {
+    onFieldClick(x: number, y: number) {
       let platz: Sitzplatz =
         this.sitzplaetze[x.toString() + "," + y.toString()];
       platz.marked = !platz.marked;
-      console.log(this.sitzplaetze);
     },
     computePlan() {
       console.log("cmpPLan");
+      this.resetNames();
     },
-    isMarked(y: number, x: number) {
+    resetNames() {
+      for (let x = 0; x < this.maxGridWidth; x++) {
+        for (let y = 0; y < this.maxGridHeight; y++) {
+          let field: Sitzplatz =
+            this.sitzplaetze[x.toString() + "," + y.toString()];
+          field.name = "";
+        }
+      }
+    },
+    isMarked(x: number, y: number) {
       return this.sitzplaetze[x.toString() + "," + y.toString()].marked;
     },
     instantiateList(maxGridWidth: number, maxGridHeight: number) {
@@ -134,9 +143,8 @@ export default defineComponent({
   justify-content: center;
   display: flex;
   margin-left: 25vw;
-
 }
-.tafelDivInner{
+.tafelDivInner {
   background-color: green;
   color: white;
   width: 71vw;
