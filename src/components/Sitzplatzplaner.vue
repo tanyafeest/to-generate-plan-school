@@ -18,6 +18,22 @@
     /><br />
     {{ gridWidth }} * {{ gridHeight }}
     <br />
+    <div class="studentFieldWrap">
+    <button class="btn" @click="studentFieldVisible = !studentFieldVisible">
+      <i class="arrowdown"></i>
+    </button>
+    <br />
+    <div v-if="studentFieldVisible" class="studentFieldDiv" id="hide">
+      <textarea
+        class="studentField"
+        v-model="studentFieldValue"
+        placeholder="Name 1&#10;Name 2&#10;..."
+      >
+      </textarea
+      ><br />
+    </div>
+    </div>
+
     <input
       type="submit"
       name="compute"
@@ -37,7 +53,7 @@
         >
           <button
             :key="sitzplaetze"
-            class="btn"
+            class="fieldBtn"
             @click="onFieldClick(x, y)"
             :style="{ background: isMarked(x, y) ? 'lightblue' : 'white' }"
             v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
@@ -67,6 +83,8 @@ export default defineComponent({
       gridWidth: 5,
       gridHeight: 5,
       sideWidth: 25,
+      studentFieldVisible: true,
+      studentFieldValue: "",
       sitzplaetze2: this.instantiateList(
         maxGridWidth,
         maxGridHeight
@@ -74,7 +92,11 @@ export default defineComponent({
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
   },
-  watch: {},
+  watch: {
+    studentFieldValue(){
+      console.log(this.studentFieldValue);
+    }
+  },
   methods: {
     onFieldClick(x: number, y: number) {
       let platz: Sitzplatz =
@@ -84,6 +106,11 @@ export default defineComponent({
     computePlan() {
       console.log("cmpPLan");
       this.resetNames();
+      let a: Sitzplatz[] = this.getUsedFieldsToComputePlan();
+      a.forEach((element) => {
+        element.name = "b";
+      });
+      this.getNames();
     },
     resetNames() {
       for (let x = 0; x < this.maxGridWidth; x++) {
@@ -129,74 +156,14 @@ export default defineComponent({
       }
       return fields;
     },
+    getNames(){
+      console.log(this.studentFieldValue.split("\n").filter(x => x !== null && x!== ""))
+    }
   },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.t1 {
-  border: 2px solid black;
-  padding: 0;
-}
-.tafelDivOuter {
-  justify-content: center;
-  display: flex;
-  margin-left: 25vw;
-}
-.tafelDivInner {
-  background-color: green;
-  color: white;
-  width: 71vw;
-}
-.sitzplatzdiv {
-  justify-content: center;
-  display: flex;
-  margin-left: 25vw;
-}
-.sideDiv {
-  width: 25vw;
-  height: 100vh;
-  position: absolute;
-  background-color: white;
-  border: 2px solid black;
-  /* overflow: auto; */
-  justify-content: center;
-  padding-top: 25px;
-}
-table {
-  align-self: center;
-  border-collapse: collapse;
-  table-layout: fixed;
-  width: 71vw;
-}
-.btn {
-  width: 100%;
-  height: 100%;
-  border: none;
-  vertical-align: top;
-}
-/* .inpSlider{
-  size: 500px;
-} */
-/* .inpSlider{
-  -webkit-appearance: none;
-  height: 25px;
-  /* background-color: #42b983; 
-  
-}
-.inpSlider::-webkit-slider-thumb{
-  -webkit-appearance: none;
-  appearance: none;
-  width:25px;
-  height:25px;
-  background-color: red;
-}
-.inpSlider::-moz-range-thumb{
-  -webkit-appearance: none;
-  appearance: none;
-  width:25px;
-  height:25px;
-  background-color: red;
-} */
+@import "../style.css";
 </style>

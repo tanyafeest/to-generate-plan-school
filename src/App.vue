@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+// npm install -g @vue/cli
 // "npm run serve" to run
 import { defineComponent } from 'vue';
 import HelloWorld from './components/Sitzplatzplaner.vue';

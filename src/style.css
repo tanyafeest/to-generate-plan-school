@@ -1,0 +1,93 @@
+
+.t1 {
+  border: 2px solid black;
+  padding: 0;
+}
+.tafelDivOuter {
+  justify-content: center;
+  display: flex;
+  margin-left: 25vw;
+}
+.tafelDivInner {
+  background-color: green;
+  color: white;
+  width: 71vw;
+}
+.sitzplatzdiv {
+  justify-content: center;
+  display: flex;
+  margin-left: 25vw;
+}
+.sideDiv {
+  width: 25vw;
+  height: 100vh;
+  position: absolute;
+  background-color: white;
+  border: 2px solid black;
+  /* overflow: auto; */
+  justify-content: center;
+  padding-top: 25px;
+}
+table {
+  align-self: center;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 71vw;
+}
+.fieldBtn {
+  width: 100%;
+  height: 100%;
+  border: none;
+  vertical-align: top;
+}
+.btn{
+  width: 24vw;
+  height: 25px;
+}
+.arrowdown {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.studentFieldDiv{
+  width: 25vw;
+  background-color: white;
+  vertical-align: top;
+}
+.studentField{
+  width: 23vw;
+  height: 50vh;
+  resize: none;
+}
+.studentFieldWrap{
+  width: 25vw; 
+  vertical-align: top;
+  justify-content: center;
+
+}
+/* .inpSlider{
+  size: 500px;
+} */
+/* .inpSlider{
+  -webkit-appearance: none;
+  height: 25px;
+  /* background-color: #42b983; 
+  
+}
+.inpSlider::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  width:25px;
+  height:25px;
+  background-color: red;
+}
+.inpSlider::-moz-range-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  width:25px;
+  height:25px;
+  background-color: red;
+} */
