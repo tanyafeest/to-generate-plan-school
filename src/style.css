@@ -2,18 +2,22 @@
   font-size: large;
 }
 .t1 {
-  border: 2px solid black;
+  border: 2px solid lightgrey;
   padding: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
+
 .tafelDivOuter {
   justify-content: center;
   display: flex;
   margin-left: 25vw;
 }
 .tafelDivInner {
-  background-color: green;
+  background-color: darkgreen;
   color: white;
   width: 71vw;
+  height: 50px;
 }
 .sitzplatzdiv {
   justify-content: center;
@@ -22,18 +26,28 @@
 }
 .sideDiv {
   width: 25vw;
-  height: 100vh;
+  height: 98vh;
   position: absolute;
   background-color: white;
   border: 2px solid darkslateblue;
-  /* overflow: auto; */
+  overflow-y: auto;
+  overflow-x: hidden;
   justify-content: center;
-  /* padding-top: 25px; */
   border-radius: 3px;
 }
-/* .sliderDiv {
+.sliderDiv {
   float: right;
-} */
+}
+.sliderInformationDiv {
+  border: solid black 2px;
+  margin: 1px;
+  height: 105px;
+  justify-content: center;
+  display: grid;
+  vertical-align: bottom;
+  margin-right: 20px;
+  margin-left: 20px;
+}
 table {
   align-self: center;
   border-collapse: collapse;
@@ -52,9 +66,19 @@ table {
   border-radius: 0;
   border: 1px black;
   transition: 0.3s;
+  overflow: auto;
+  /* background-color: rgb(213, 172, 255); */
+  background-color: rgb(222, 194, 255);
 }
 .btn:hover {
   background-color: gray;
+}
+.ruleBtn {
+  background-color: white;
+  border: 1px solid rgb(222, 194, 255);
+  /* border: 1px solid darkslateblue; */
+  border-radius: 5px;
+  margin-top: 2%;
 }
 .submit {
   color: white;
@@ -62,7 +86,7 @@ table {
   height: 50px;
 }
 .submit:hover {
-  background-color: slateblue;
+  background-color: darkslateblue;
 }
 .arrowdown {
   transform: rotate(45deg);
@@ -72,7 +96,8 @@ table {
   transform: rotate(225deg);
   -webkit-transform: rotate(225deg);
 }
-.arrowup, .arrowdown{
+.arrowup,
+.arrowdown {
   border: solid black;
   border-width: 0 3px 3px 0;
   display: inline-block;
@@ -85,53 +110,96 @@ table {
   vertical-align: top;
   justify-content: center;
 }
-/* .studentFieldDiv{
-  width: 100%;
-  background-color: pink;
-  vertical-align: top;
-} */
+
 .studentField {
   font-size: x-large;
-  width: 100%;
+  margin: 0.5%;
+  border-radius: 3px;
+  width: 99%;
   height: 50vh;
   background-color: whitesmoke;
+  padding: 0;
   resize: none;
   box-sizing: border-box;
-  /* overflow: hidden; */
+  display: block;
 }
 .studentField:focus {
   outline: none !important;
-  border: 1px solid blue;
+  border: 2px solid slateblue;
+  border-radius: 5px;
 }
 
-.studentFieldFade-enter-active {
-  transition: height 0.15s ease-out;
-  /* overflow: hidden; */
-}
-
-.studentFieldFade-leave-active {
-  transition: height 0.15s ease-out;
-  overflow: hidden;
-}
-
-.studentFieldFade-enter-from,
-.studentFieldFade-leave-to {
-  height: 0;
-  overflow: hidden;
-}
-
-/* .inpSlider {
+.inpSlider {
   max-width: 90%;
-} */
+}
 .verticalSlider {
   -webkit-appearance: slider-vertical;
   transform: rotate(180deg);
   float: right;
-  margin-right: 1%;
-  width: 12px;
+  margin-right: 2%;
+  width: 15px;
 }
-.horizontalSlider{
-  /* margin-right: 25px; */
-  margin-left: 2%;
-  width: 95%;
+.horizontalSlider {
+  margin-right: 20px;
+  margin-left: 1%;
+  height: 15px;
+}
+
+.ruleDiv {
+  font-size: x-large;
+  width: 100%;
+  height: 50vh;
+  background-color: whitesmoke;
+  padding: 0;
+  resize: none;
+  box-sizing: border-box;
+  display: block;
+  padding: 1%;
+}
+.singleRuleDiv {
+  /* padding-bottom: 1%; */
+  margin-top: 1%;
+  /* border: solid 1px rgb(222, 194, 255); */
+  /* border: solid 1px slateblue; */
+  /* border-radius: 3px; */
+  border-collapse: separate;
+  background-color: white;
+  /* border-bottom: none; */
+}
+.ruleSelect {
+  width: 40%;
+  border: solid 1px darkslateblue;
+  border-radius: 2px;
+}
+.ruleWrap {
+  width: 100%;
+  vertical-align: top;
+  justify-content: center;
+}
+.deleteRule {
+  color: white;
+  background-color: red;
+  /* position: relative; */
+  margin-right: 2%;
+  border-radius: 0;
+  border: 1px black;
+  transition: 0.3s;
+  height: 100%;
+}
+.deleteRule:hover {
+  background-color: darkred;
+}
+.openTransition-enter-active {
+  transition: height 0.15s ease-out;
+}
+
+.openTransition-leave-active {
+  transition: height 0.15s ease-out;
+  overflow: hidden;
+}
+
+.openTransition-enter-from,
+.openTransition-leave-to {
+  height: 0;
+  overflow: hidden;
 }
