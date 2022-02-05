@@ -143,5 +143,9 @@ export default defineComponent({
     getNames() {
       return this.studentFieldValue.split("\n").filter((x) => x !== null && x !== "");
     },
+    getNumberOfFields()
+    {
+      return this.getUsedFieldsToComputePlan().length;
+    },
   },
 });
