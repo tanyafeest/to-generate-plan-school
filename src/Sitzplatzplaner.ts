@@ -40,6 +40,16 @@ export default defineComponent({
       },
       deep: true,
     },
+    nearbyRules: {
+      handler() {
+        for (let index = 0; index < this.nearbyRules.length; index++) {
+          if (this.nearbyRules[index].student1 == this.nearbyRules[index].student2 && this.nearbyRules[index].student1 != "") {
+            this.nearbyRules[index].student2 = "";
+          }
+        }
+      },
+      deep: true,
+    },
     studentFieldValue() {
       const names: string[] = this.getNames();
       for (let i = this.firstRowRules.length - 1; i >= 0; i--) {
