@@ -10,6 +10,8 @@
       </div>
       <input type="range" name="gridWidth" v-model="gridWidth" min="5" :max="maxGridWidth" class="inpSlider horizontalSlider" />
     </div>
+    <!-- <div class="sliderDiv">
+    </div> -->
     <div class="studentFieldWrap">
       <button class="btn" @click="studentFieldVisible = closeEverythingExcept(studentFieldVisible)">
         Namen der Schüler&nbsp;&nbsp;
@@ -91,7 +93,7 @@
                 <select v-model="nearbyRules[parseInt(i)].student1" class="ruleSelect">
                   <option v-for="o in getNames()" :key="o">{{ o }}</option>
                 </select>
-                <p style="margin: 0; margin-right: 3%; margin-left: 3%; display: inline-block; color: darkred">-</p>
+                <p style="margin: 0; margin-right: 3%; margin-left: 3%; display: inline-block; color: darkgreen">-</p>
                 <select v-model="nearbyRules[parseInt(i)].student2" class="ruleSelect">
                   <option v-for="o in getNames()" :key="o">{{ o }}</option>
                 </select>
@@ -109,7 +111,7 @@
             "
           > -->
           <button class="btn subBtn" @click="firstRowRulesVisible = !firstRowRulesVisible">
-            möglichst nach vorne&nbsp;&nbsp;
+            Möglichst nach vorne&nbsp;&nbsp;
             <i v-if="!firstRowRulesVisible" class="arrowdown" />
             <i v-if="firstRowRulesVisible" class="arrowup" />
           </button>
@@ -123,12 +125,14 @@
               </div>
               <select
                 class="ruleSelect"
-                style="width: 90%"
+                style="width: 100%; height:100%; margin-bottom:2%; padding-bottom:2%; text-align:center;"
                 @change="
                   addFirstRow($event.target.value);
-                  $event.target.value = null;
+                  $event.target.value = -1;
                 "
               >
+              <option value="-1" selected disabled hidden>Schüler auswählen</option>
+
                 <option v-for="o in getNames()" :key="o">{{ o }}</option>
               </select>
               <!-- <button class="btn ruleBtn" @click="addRule(nearbyRules)">Neue Regel</button> -->

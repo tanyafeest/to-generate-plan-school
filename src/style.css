@@ -36,7 +36,12 @@
   border-radius: 3px;
 }
 .sliderDiv {
+  border: 2px solid darkslateblue;
+  border-top: none;
+  border-right: none;
+  /* border-bottom: none; */
   float: right;
+
 }
 .sliderInformationDiv {
   border: solid black 2px;
@@ -220,8 +225,8 @@ input[type="file"]::file-selector-button:hover {
 }
 .ruleTypeDiv {
   /* background-color: red; */
-  padding-bottom: 6px;
   padding: 3%;
+  padding-bottom: 3%;
   border-left: 1px slateblue;
   border-right: 1px slateblue;
   border-top: 0;
