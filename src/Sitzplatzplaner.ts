@@ -5,9 +5,7 @@ import { Student } from "./helper/Student";
 
 export default defineComponent({
   name: "Sitzplatzplaner",
-  props: {
-    msg: String,
-  },
+  props: {},
   data() {
     const maxGridWidth = 15;
     const maxGridHeight = 15;
@@ -20,22 +18,43 @@ export default defineComponent({
       sideWidth: 25,
       studentFieldVisible: true,
       ruleVisible: false,
+      avoidRulesVisible: true,
+      nearbyRulesVisible: false,
+      firstRowRulesVisible: false,
       studentFieldValue: "",
-      rules: [] as Rule[],
+      nearbyRules: [] as Rule[],
+      avoidRules: [] as Rule[],
+      firstRowRules: [] as string[],
       sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
   },
   watch: {
-    rules: {
+    avoidRules: {
       handler() {
-        for (let index = 0; index < this.rules.length; index++) {
-          if (this.rules[index].student1 == this.rules[index].student2 && this.rules[index].student1 != "") {
-            this.rules[index].student2 = "";
+        for (let index = 0; index < this.avoidRules.length; index++) {
+          if (this.avoidRules[index].student1 == this.avoidRules[index].student2 && this.avoidRules[index].student1 != "") {
+            this.avoidRules[index].student2 = "";
           }
         }
       },
       deep: true,
+    },
+    studentFieldValue() {
+      const names: string[] = this.getNames();
+      for (let i = this.firstRowRules.length - 1; i >= 0; i--) {
+        if (!names.includes(this.firstRowRules[i])) {
+          this.firstRowRules.splice(i, 1);
+        }
+      }
+
+      [this.avoidRules, this.nearbyRules].forEach((rules) => {
+        for (let i = rules.length - 1; i >= 0; i--) {
+          if (!(names.includes(rules[i].student1) && names.includes(rules[i].student2))) {
+            rules.splice(i, 1);
+          }
+        }
+      });
     },
   },
   methods: {
@@ -43,31 +62,37 @@ export default defineComponent({
       const platz: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
       platz.marked = !platz.marked;
     },
-    addRule() {
-      this.rules.push(new Rule());
-      console.log(this.rules.length);
+    addRule(ruleList: Rule[]) {
+      ruleList.push(new Rule());
     },
-    deleteRuleAt(i: number) {
-      // delete this.rules[i];
-      this.rules.splice(i, 1);
+    deleteRuleAt(i: number, ruleList: Rule[]) {
+      ruleList.splice(i, 1);
     },
-    deleteUncompleteRules()
-    {
-      for (let i = this.rules.length - 1; i >= 0; i--) {
-        if (this.rules[i].student1 == "" || this.rules[i].student2 == "")
-        {
-          this.rules.splice(i, 1);
+    deleteUncompleteavoidRules() {
+      [this.avoidRules, this.nearbyRules].forEach((ruleList) => {
+        for (let i = ruleList.length - 1; i >= 0; i--) {
+          if (ruleList[i].student1 == "" || ruleList[i].student2 == "") {
+            ruleList.splice(i, 1);
+          }
         }
-      }
+      });
     },
     closeEverythingExcept(except: boolean) {
       this.ruleVisible = false;
       this.studentFieldVisible = false;
+      // this.nearbyRulesVisible = false;
+      // this.avoidRulesVisible = false;
       return !except;
+    },
+    addFirstRow(value: string) {
+      if (!this.firstRowRules.includes(value)) {
+        this.firstRowRules.push(value);
+      }
     },
     computePlan() {
       console.log("cmpPLan");
-      this.deleteUncompleteRules();
+      console.log(this.avoidRules);
+      this.deleteUncompleteavoidRules();
       this.resetNamesOnPlan();
     },
     resetNamesOnPlan() {
