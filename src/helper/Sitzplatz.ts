@@ -4,7 +4,7 @@ export class Sitzplatz
     y: number;
     marked: boolean;
     name: string;
-    neighbours: number = -1;
+    neighbours = -1;
     constructor(x: number, y: number, marked: boolean) {
         this.x = x;
         this.y = y;
