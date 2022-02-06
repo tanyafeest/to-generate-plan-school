@@ -36,22 +36,58 @@
   border-radius: 3px;
 }
 .sliderDiv {
+  height: 150px;
+  width: 150px;
   border: 2px solid darkslateblue;
   border-top: none;
   border-right: none;
   /* border-bottom: none; */
   float: right;
-
 }
+/* .verticalSliderDiv{
+  height: 130px;
+  position: absolute;
+  top: 50px;
+  right: -50px;
+} */
 .sliderInformationDiv {
   border: solid black 2px;
   margin: 1px;
   height: 105px;
+  width: 105px;
   justify-content: center;
   display: grid;
   vertical-align: bottom;
   margin-right: 20px;
-  margin-left: 20px;
+  margin-left: 10px;
+  margin-top: 10px;
+  float: left;
+}
+.inpSlider {
+  max-width: 90%;
+}
+.verticalSlider {
+  /* -webkit-appearance: slider-vertical; */
+  /* transform: rotate(180deg); */
+  /* float: right; */
+  margin-right: 2%;
+  /* width: 125px; */
+  width: 125px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+       transform: rotate(90deg);
+
+  height: 125px;
+  position: absolute;
+  top: 0px;
+  right: -55px;
+}
+.horizontalSlider {
+  margin-right: 20px;
+  margin-left: 1%;
+  margin-top: 5px;
+  height: 15px;
+  width: 125px;
 }
 table {
   align-self: center;
@@ -192,21 +228,6 @@ input[type="file"]::file-selector-button {
 }
 input[type="file"]::file-selector-button:hover {
   background-color: darkslateblue;
-}
-.inpSlider {
-  max-width: 90%;
-}
-.verticalSlider {
-  -webkit-appearance: slider-vertical;
-  transform: rotate(180deg);
-  float: right;
-  margin-right: 2%;
-  width: 15px;
-}
-.horizontalSlider {
-  margin-right: 20px;
-  margin-left: 1%;
-  height: 15px;
 }
 
 .ruleDiv {

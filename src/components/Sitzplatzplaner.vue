@@ -2,12 +2,12 @@
   <div class="sideDiv">
     <!-- <img alt="Vue logo" src="@/assets/GMO_Schullogo.png" style="width:33%; margin-top:3%"> -->
     <div class="sliderDiv">
-      <input type="range" name="gridHeight" v-model="gridHeight" min="5" :max="maxGridHeight" class="inpSlider verticalSlider" /><br />
       <div class="sliderInformationDiv">
         <!-- <p style="margin-top: 5%"> -->
         <span style="line-height: 25px; padding-top:31px;"> {{ gridWidth }} * {{ gridHeight }}<br>{{ getNumberOfFields() }} Sitzplätze</span>
         <!-- </p> -->
       </div>
+      <div class="verticalSliderDiv"><input type="range" name="gridHeight" v-model="gridHeight" min="5" :max="maxGridHeight" class="inpSlider verticalSlider" /></div>
       <input type="range" name="gridWidth" v-model="gridWidth" min="5" :max="maxGridWidth" class="inpSlider horizontalSlider" />
     </div>
     <!-- <div class="sliderDiv">
