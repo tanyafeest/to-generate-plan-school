@@ -1,4 +1,5 @@
 <template>
+<div @mousedown="isMouseDown = true" @mouseup="isMouseDown = false">
   <div class="sideDiv">
     <!-- <img alt="Vue logo" src="@/assets/GMO_Schullogo.png" style="width:33%; margin-top:3%"> -->
     <div class="sliderDiv">
@@ -21,7 +22,7 @@
       <transition name="openTransition">
         <div v-if="studentFieldVisible" class="studentFieldDiv">
           <textarea v-if="studentFieldVisible" class="studentField" v-model="studentFieldValue" placeholder="Name 1&#10;Name 2&#10;..."> </textarea>
-          <input type="file" accept="text/csv,application/csv" id="fileInputThingy" />
+          <input type="file" accept="text/csv,application/csv" id="fileInputThingy" @change="loadStudentFile($event)"/>
           <button class="fileInputThingy">
             <label for="fileInputThingy" style="width: 100%; height: 100%; display: block; cursor: pointer"><span style="line-height: 31px"> Datei auswählen </span></label>
           </button>
@@ -162,14 +163,15 @@
           :key="x"
           class="t1"
           :style="{
-            height: 90 / parseInt(gridHeight) + 'vh',
+            height: 85 / parseInt(gridHeight) + 'vh',
             border: !isMarked(x, y) ? 'lightgrey 2px solid' : 'none',
           }"
         >
           <button
             :key="sitzplaetze"
             class="fieldBtn"
-            @click="onFieldClick(x, y)"
+            @mousedown="onFieldClick(x, y)"
+            @mouseenter="onFieldClickWhenMouseIsDown(x,y)"
             :style="{
               background: isMarked(x, y) ? 'lightblue' : 'white',
               border: isMarked(x, y) ? 'black 2px solid' : 'none',
@@ -182,6 +184,7 @@
       </tr>
     </table>
   </div>
+</div>
 </template>
 
 <script lang="ts" src="@/Sitzplatzplaner.ts" />

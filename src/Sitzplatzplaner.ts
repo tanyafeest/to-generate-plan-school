@@ -25,6 +25,7 @@ export default defineComponent({
       nearbyRules: [] as Rule[],
       avoidRules: [] as Rule[],
       firstRowRules: [] as string[],
+      isMouseDown: false,
       sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
@@ -72,6 +73,11 @@ export default defineComponent({
       const platz: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
       platz.marked = !platz.marked;
     },
+    onFieldClickWhenMouseIsDown(x: number, y: number) {
+      if (this.isMouseDown) {
+        this.onFieldClick(x, y);
+      }
+    },
     addRule(ruleList: Rule[]) {
       ruleList.push(new Rule());
     },
@@ -102,8 +108,87 @@ export default defineComponent({
     computePlan() {
       console.log("cmpPLan");
       console.log(this.avoidRules);
-      this.deleteUncompleteavoidRules();
       this.resetNamesOnPlan();
+      this.deleteUncompleteavoidRules();
+      this.createStudentsFromRules();
+    },
+    findStudentInArrayByName(name: string, arr: Student[]) {
+      for (const element of arr) {
+        if (name == element.name) {
+          return element;
+        }
+      }
+    },
+    createStudentsFromRules() {
+      const studentList = [] as Student[];
+      this.getNames().forEach((student) => {
+        let firstRow = false;
+        this.firstRowRules.forEach((rule) => {
+          if (rule == student) {
+            firstRow = true;
+            return;
+          }
+        });
+        const s = new Student(student, [], []);
+        s.frontRow = firstRow;
+        studentList.push(s);
+      });
+
+      this.avoidRules.forEach((rule) => {
+        const s1 = this.findStudentInArrayByName(rule.student1, studentList);
+        const s2 = this.findStudentInArrayByName(rule.student2, studentList);
+        if (s1 && s2) {
+          s1.avoid.push(s2);
+          s2.avoid.push(s1);
+        }
+      });
+
+      this.nearbyRules.forEach((rule) => {
+        const s1 = this.findStudentInArrayByName(rule.student1, studentList);
+        const s2 = this.findStudentInArrayByName(rule.student2, studentList);
+        if (s1 && s2) {
+          s1.sitWith.push(s2);
+          s2.sitWith.push(s1);
+        }
+      });
+
+      return studentList;
+    },
+    loadStudentFile(ev: any) {
+      const file: File = ev.target.files[0];
+      let result;
+      const reader = new FileReader();
+      if (file.name.includes(".csv")) {
+        reader.onload = (res) => {
+          result = res?.target?.result;
+
+          if (result) {
+            this.loadNamesFromFile(result.toString());
+          }
+        };
+        reader.readAsText(file);
+      } else {
+        alert("Diese Datei ist keine CSV-Datei");
+      }
+    },
+    loadNamesFromFile(data: string) {
+      const lines = data.split("\n").filter((x) => x !== null && x !== "");
+      let courseName: string;
+      this.studentFieldValue = "";
+      for (let i = 0; i < lines.length; i++) {
+        if (i == 0) {
+          courseName = lines[i].split(",").filter((x) => x !== null && x !== "")[0];
+        } else if (i > 1)
+        {
+          let name: string;
+          name = lines[i].split(",")[2] + " ";
+          name += lines[i].split(",")[1] + "\n";
+          if (name.trim().length > 0)
+          {
+            this.studentFieldValue += name;
+          }
+        }
+      }
     },
     resetNamesOnPlan() {
       for (let x = 0; x < this.maxGridWidth; x++) {
@@ -153,9 +238,11 @@ export default defineComponent({
     getNames() {
       return this.studentFieldValue.split("\n").filter((x) => x !== null && x !== "");
     },
-    getNumberOfFields()
-    {
+    getNumberOfFields() {
       return this.getUsedFieldsToComputePlan().length;
+    },
+    log(a: any) {
+      console.log(a);
     },
   },
 });
