@@ -1,7 +1,7 @@
 export class Student
 {
     name : string;
-    frontRow : boolean = false;
+    frontRow = false;
     avoid : Student[];
     sitWith : Student[];
     constructor(name: string, avoid: Student[] = [], sitWith: Student[] = []) {
