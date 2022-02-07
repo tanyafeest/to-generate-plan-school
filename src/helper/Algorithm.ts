@@ -19,17 +19,22 @@ export default function compute(sitzplaetze : Sitzplatz[], students : Student[])
         }
     });
 
-    let frontSeats: Student[] = [];
+    let frontSeatStudents: Student[] = [];
     students.forEach(i => {
         if (i.frontRow) {
-            frontSeats.push(i);
+            frontSeatStudents.push(i);
         }
     });
 
+    let frontSeats: Sitzplatz[] = [];
+    calculateNeighbours(sitzplaetze, frontSeats);
+
+
 }
 
-function calculateNeighbours(sitzplaetze : Sitzplatz[]) {
+function calculateNeighbours(sitzplaetze: Sitzplatz[], frontRow?: Sitzplatz[], lastRow?: Sitzplatz[], middleRows?: Sitzplatz[]) { // calculates the number of neighbours for every seat and sorts the given array, also calculates front Seats.
     let maxX: number = 0;
+    let minY: number = 100000;
     let maxY: number = 0;
     sitzplaetze.forEach(i => {
         if (i.x > maxX) {
@@ -38,7 +43,19 @@ function calculateNeighbours(sitzplaetze : Sitzplatz[]) {
         if (i.y > maxY) {
             maxY = i.y
         }
-    });
+        if (i.y < minY) {
+            minY = i.y;
+        }
+    })
+
+    if (frontRow != undefined) {
+        sitzplaetze.forEach(i => {
+            if (i.y == minY) {
+                frontRow.push(i);
+            }
+        });
+    }
+    
 
     let sitzplaetzeR: number[][] = [];
     for (let i = 0; i <= maxX; i++) {
@@ -55,7 +72,34 @@ function calculateNeighbours(sitzplaetze : Sitzplatz[]) {
                 sitzplaetzeR[j][k]++;
             }
         }
-    });
+    })
+
+    sitzplaetze.forEach(i => {
+        i.neighbours = sitzplaetzeR[i.x][i.y];
+    })
+
+    quickSortNeighbours(sitzplaetze);
+}
+
+function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
+    if (sitzplaetze.length > 1){
+        let compare: any;
+        compare = sitzplaetze.pop();
+        let less: Sitzplatz[] = [];
+        let more: Sitzplatz[] = [];
+        sitzplaetze.forEach(i => {
+            if (i.neighbours <= compare.neighbours){
+                less.push(i);
+            }
+            else {
+                more.push(i);
+            }
+        });
+        quickSortNeighbours(less);
+        quickSortNeighbours(more);
+        less.push(compare)
+        sitzplaetze = less.concat(more);
+    }
 }
 
 function minLimit(input: number, limit: number) {
