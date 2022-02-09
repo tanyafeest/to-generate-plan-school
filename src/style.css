@@ -47,16 +47,18 @@
   font-size: xx-large;
   background-color: transparent;
   border: none;
-  color: red;
+  border-radius: 5px; /* for hovering */
   transition: 0.3s;
   float: right;
   margin-left: 5px;
+  color: slateblue;
   /* position: absolute;
   right: 24.5%;
   top: 8%; */
 }
 .closePresetContent:hover {
-  color: darkred;
+  color: darkslateblue;
+  background-color: whitesmoke;
 }
 .presetBtn {
   margin-top: 15px;
