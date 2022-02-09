@@ -1,6 +1,15 @@
 <template>
+  <div class="presetDiv" v-if="presetPageOpen">
+    <div class="presetContent">
+      <button class="closePresetContent" @click="presetPageOpen = false">X</button>
+      <button v-for="(_, i) in parseInt(presetCount)" :key="i" class="presetBtn" @click="setPreset(i)">
+        <img :src="require(`@/assets/preset${i}.png`)" class="presetImg" />
+      </button>
+    </div>
+  </div>
   <div @mousedown="isMouseDown = true" @mouseup="isMouseDown = false">
     <div class="sideDiv">
+      <button @click="presetPageOpen = true" class="openPresetBtn"> Raumvorlagen öffnen </button>
       <!-- <img alt="Vue logo" src="@/assets/GMO_Schullogo.png" style="width:33%; margin-top:3%"> -->
       <div class="sliderDiv">
         <div class="sliderInformationDiv">
@@ -139,11 +148,12 @@
 
       <button name="compute" @click="computePlan" class="btn submit">Plan erstellen</button>
       <span class="credits creditsWrap"
-        >{{ "\n" }}Entwickelt von: {{ "\n" }}<a class="credits creditsA" href="https://github.com/Florik3ks" target="_blank">Florian E</a>
+        >{{ "\n" }}Entwickelt von: {{ "\n" }}
+        <a class="credits creditsA" href="https://github.com/Florik3ks" target="_blank">Florian E.</a>
         &
-        <a class="credits creditsA" href="https://github.com/1td" target="_blank"> Joshua J</a>
-        <!-- {{ "\n" }}mit Hilfe von
-        <a class="credits creditsA" href="https://github.com/PlisJan" target="_blank">Jan P</a> -->
+        <a class="credits creditsA" href="https://github.com/1td" target="_blank"> Joshua J.</a>
+        {{ "\n" }}mit Hilfe von
+        <a class="credits creditsA" href="https://github.com/PlisJan" target="_blank">Jan P.</a>
         {{ "\n" }}
         {{ "\n" }}<a class="credits creditsA" href="https://www.gymnasium-oberstadt.de/" target="_blank">GMO</a> 13 Informatik-LK (2022){{ "\n" }}unter der Leitung von Herrn Meß
       </span>

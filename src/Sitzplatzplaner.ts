@@ -26,7 +26,9 @@ export default defineComponent({
       avoidRules: [] as Rule[],
       firstRowRules: [] as string[],
       isMouseDown: false,
-      sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
+      presetCount: 3,
+      presetPageOpen: false,
+      // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
   },
@@ -76,6 +78,45 @@ export default defineComponent({
     onFieldClickWhenMouseIsDown(x: number, y: number) {
       if (this.isMouseDown) {
         this.onFieldClick(x, y);
+      }
+    },
+    setPreset(i: number) {
+      console.log("setPreset" + i);
+      this.presetPageOpen = false;
+      this.sitzplaetze = this.instantiateDict(this.maxGridWidth, this.maxGridHeight);
+      switch (i) {
+        case 0:
+          this.gridWidth = 9;
+          this.gridHeight = 7;
+          for (let y = 0; y < 7; y += 2) {
+            for (let x = 0; x < 9; x++) {
+              if (x != 4) {
+                this.onFieldClick(x, y);
+              }
+            }
+          }
+          break;
+        case 1:
+          this.gridWidth = 7;
+          this.gridHeight = 7;
+          for (let y = 0; y < 7; y += 2) {
+            for (let x = 0; x < 7; x++) {
+              if (x != 3) {
+                this.onFieldClick(x, y);
+              }
+            }
+          }
+          for (let y = 1; y < 6; y += 2) {
+            this.onFieldClick(0, y);
+            this.onFieldClick(6, y);
+          }
+          break;
+        case 2:
+          this.gridWidth = 5;
+          this.gridHeight = 5;
+          break;
+        default:
+          break;
       }
     },
     addRule(ruleList: Rule[]) {
@@ -178,13 +219,11 @@ export default defineComponent({
       for (let i = 0; i < lines.length; i++) {
         if (i == 0) {
           courseName = lines[i].split(",").filter((x) => x !== null && x !== "")[0];
-        } else if (i > 1)
-        {
+        } else if (i > 1) {
           let name: string;
           name = lines[i].split(",")[2] + " ";
           name += lines[i].split(",")[1] + "\n";
-          if (name.trim().length > 0)
-          {
+          if (name.trim().length > 0) {
             this.studentFieldValue += name;
           }
         }
@@ -204,15 +243,15 @@ export default defineComponent({
       }
       return this.sitzplaetze[x.toString() + "," + y.toString()].marked;
     },
-    instantiateList(maxGridWidth: number, maxGridHeight: number) {
-      const fields: Sitzplatz[] = [];
-      for (let x = 0; x < maxGridWidth; x++) {
-        for (let y = 0; y < maxGridHeight; y++) {
-          fields.push(new Sitzplatz(x, y, false));
-        }
-      }
-      return fields;
-    },
+    // instantiateList(maxGridWidth: number, maxGridHeight: number) {
+    //   const fields: Sitzplatz[] = [];
+    //   for (let x = 0; x < maxGridWidth; x++) {
+    //     for (let y = 0; y < maxGridHeight; y++) {
+    //       fields.push(new Sitzplatz(x, y, false));
+    //     }
+    //   }
+    //   return fields;
+    // },
     instantiateDict(maxGridWidth: number, maxGridHeight: number) {
       const dict: { [id: string]: Sitzplatz } = {};
 
