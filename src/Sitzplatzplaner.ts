@@ -219,11 +219,11 @@ export default defineComponent({
       this.studentFieldValue = "";
       for (let i = 0; i < lines.length; i++) {
         if (i == 0) {
-          courseName = lines[i].split(",").filter((x) => x !== null && x !== "")[0];
+          courseName = lines[i].split(";").filter((x) => x !== null && x !== "")[0];
         } else if (i > 1) {
           let name: string;
-          name = lines[i].split(",")[2].replace('"',"") + " ";
-          name += lines[i].split(",")[1].replace('"',"") + "\n";
+          name = lines[i].split(";")[2].replace('"',"") + " ";
+          name += lines[i].split(";")[1].replace('"',"") + "\n";
           if (name.trim().length > 0) {
             this.studentFieldValue += name;
           }
