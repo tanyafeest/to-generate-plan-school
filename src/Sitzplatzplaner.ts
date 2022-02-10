@@ -208,7 +208,7 @@ export default defineComponent({
             this.loadNamesFromFile(result.toString());
           }
         };
-        reader.readAsText(file);
+        reader.readAsText(file, 'ISO-8859-1');
       } else {
         alert("Diese Datei ist keine CSV-Datei");
       }
