@@ -1,3 +1,5 @@
+import { Student } from "./Student";
+
 export class Sitzplatz
 {
     x: number;

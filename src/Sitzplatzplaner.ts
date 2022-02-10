@@ -2,6 +2,7 @@ import { defineComponent } from "vue";
 import { Sitzplatz } from "@/helper/Sitzplatz";
 import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
+import compute from "./helper/Algorithm";
 
 export default defineComponent({
   name: "Sitzplatzplaner",
@@ -151,7 +152,7 @@ export default defineComponent({
       console.log(this.avoidRules);
       this.resetNamesOnPlan();
       this.deleteUncompleteavoidRules();
-      this.createStudentsFromRules();
+      compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
     },
     findStudentInArrayByName(name: string, arr: Student[]) {
       for (const element of arr) {

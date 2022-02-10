@@ -4,9 +4,12 @@ import { Student } from './Student';
 
 export default function compute(sitzplaetze : Sitzplatz[], students : Student[]){
 
-    
+    if (sitzplaetze.length < students.length)
+    {
+        alert("Es gibt weniger Plätze als Schüler")
+    }
 
-    let haveRule: Student[] = [];
+    const haveRule: Student[] = [];
     students.forEach(i => {
         if (i.frontRow) {
             haveRule.push(i);
@@ -19,23 +22,62 @@ export default function compute(sitzplaetze : Sitzplatz[], students : Student[])
         }
     });
 
-    let frontSeatStudents: Student[] = [];
+    const frontSeatStudents: Student[] = [];
     students.forEach(i => {
         if (i.frontRow) {
             frontSeatStudents.push(i);
         }
     });
 
-    let frontSeats: Sitzplatz[] = [];
-    calculateNeighbours(sitzplaetze, frontSeats);
+    const rows: Sitzplatz[][] = [];
+    calculateNeighbours(sitzplaetze, rows);
 
+    orderByAffability(students);
 
 }
 
-function calculateNeighbours(sitzplaetze: Sitzplatz[], frontRow?: Sitzplatz[], lastRow?: Sitzplatz[], middleRows?: Sitzplatz[]) { // calculates the number of neighbours for every seat and sorts the given array, also calculates front Seats.
-    let maxX: number = 0;
-    let minY: number = 100000;
-    let maxY: number = 0;
+function validate(students: Student[])
+{
+    for (let i = 0; i < students.length; i++) {
+        const student = students[i];
+        if (!student.seat.marked)
+        {
+            return false;
+        }
+        for (let j = 0; j < student.avoid.length; j++) {
+            const toAvoid = student.avoid[j];
+            if (isClose(student.seat.x, student.seat.y, toAvoid.seat.x, toAvoid.seat.y))
+            {
+                return false;
+            }
+        }
+        for (let j = 0; j < student.sitWith.length; j++) {
+            const toSitwith = student.sitWith[j];
+            if (!isClose(student.seat.x, student.seat.y, toSitwith.seat.x, toSitwith.seat.y))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function isClose(x1: number, y1: number, x2: number, y2: number)
+{
+    return (Math.abs(x1 - x2) <= 1 && Math.abs(y1 - y2) <= 1)
+}
+
+function orderByAffability(students:Student[]) {
+    students.forEach(i => {
+        i.calculateAffability();
+    });
+    quickSortAffability(students);
+}
+
+function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { // calculates the number of neighbours for every seat and sorts the given array, also calculates front Seats.
+    let maxX = 0;
+    let minY = 100000;
+    let maxY = 0;
     sitzplaetze.forEach(i => {
         if (i.x > maxX) {
             maxX = i.x;
@@ -47,19 +89,10 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], frontRow?: Sitzplatz[], l
             minY = i.y;
         }
     })
-
-    if (frontRow != undefined) {
-        sitzplaetze.forEach(i => {
-            if (i.y == minY) {
-                frontRow.push(i);
-            }
-        });
-    }
     
-
-    let sitzplaetzeR: number[][] = [];
+    const sitzplaetzeR  = [] as number[][];
     for (let i = 0; i <= maxX; i++) {
-        let row: number[] = [];
+        const row = [] as number[];
         for (let j = 0; j <= maxY; j++) {
             row.push(-1);
         }
@@ -79,14 +112,25 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], frontRow?: Sitzplatz[], l
     })
 
     quickSortNeighbours(sitzplaetze);
+
+    if (rows != undefined)
+    {
+        for (let i = 0; i < maxY - minY + 1; i++) {
+            rows.push([]);
+            
+        }
+        sitzplaetze.forEach(i => {
+            rows[i.y - minY].push(i);
+        });
+    }
+
 }
 
 function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
     if (sitzplaetze.length > 1){
-        let compare: any;
-        compare = sitzplaetze.pop();
-        let less: Sitzplatz[] = [];
-        let more: Sitzplatz[] = [];
+        const compare: any = sitzplaetze.pop();
+        const less: Sitzplatz[] = [];
+        const more: Sitzplatz[] = [];
         sitzplaetze.forEach(i => {
             if (i.neighbours <= compare.neighbours){
                 less.push(i);
@@ -99,6 +143,26 @@ function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
         quickSortNeighbours(more);
         less.push(compare)
         sitzplaetze = less.concat(more);
+    }
+}
+
+function quickSortAffability(students: Student[]) {
+    if (students.length > 1){
+        const compare: any = students.pop();
+        const less = [] as Student[]
+        const more = [] as Student[]
+        students.forEach(i => {
+            if (i.affability <= compare.affability){
+                less.push(i);
+            }
+            else {
+                more.push(i);
+            }
+        });
+        quickSortAffability(less);
+        quickSortAffability(more);
+        less.push(compare)
+        students = less.concat(more);
     }
 }
 
@@ -120,7 +184,7 @@ function maxLimit(input: number, limit: number) {
     }
 }
 
-function matchLists(l1: Object[], l2: Object[]){
+function matchLists(l1: [], l2: []){
     //takes two lists and returns true if any element of the first is also in the second.
     l1.forEach(i => {
         if (l2.includes(i)) {
