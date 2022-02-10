@@ -34,37 +34,34 @@ export default function compute(sitzplaetze : Sitzplatz[], students : Student[])
 
     orderByAffability(students);
 
+
+}
+
+function recSolve(unsolved: Student[], seats: Sitzplatz[])
+{
+    for (let i = 0; i < seats.length; i++) {
+        const seat = seats[i];
+        if (seat.name == "")
+        {
+            unsolved[0].setSeat(seat);
+            if (unsolved[0].validate())
+            {
+                recSolve(unsolved, seats);
+            }
+        }
+    }
 }
 
 function validate(students: Student[])
 {
     for (let i = 0; i < students.length; i++) {
         const student = students[i];
-        if (!student.seat.marked)
+        if (!student.validate())
         {
             return false;
         }
-        for (let j = 0; j < student.avoid.length; j++) {
-            const toAvoid = student.avoid[j];
-            if (isClose(student.seat.x, student.seat.y, toAvoid.seat.x, toAvoid.seat.y))
-            {
-                return false;
-            }
-        }
-        for (let j = 0; j < student.sitWith.length; j++) {
-            const toSitwith = student.sitWith[j];
-            if (!isClose(student.seat.x, student.seat.y, toSitwith.seat.x, toSitwith.seat.y))
-            {
-                return false;
-            }
-        }
     }
     return true;
-}
-
-function isClose(x1: number, y1: number, x2: number, y2: number)
-{
-    return (Math.abs(x1 - x2) <= 1 && Math.abs(y1 - y2) <= 1)
 }
 
 function orderByAffability(students:Student[]) {

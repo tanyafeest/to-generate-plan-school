@@ -4,6 +4,14 @@ import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
 import compute from "./helper/Algorithm";
 
+/*  
+  + TODO: blaue knöpfe
+vorlagenknopf
+möglichst nach vorne fixen
+nicht nach hinten
+manuell zuweisen
+
+*/
 export default defineComponent({
   name: "Sitzplatzplaner",
   props: {},

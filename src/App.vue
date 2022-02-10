@@ -1,19 +1,19 @@
 
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <Planer />
 </template>
 
 <script lang="ts">
 // npm install -g @vue/cli
 // "npm run serve" to run
 import { defineComponent } from 'vue';
-import HelloWorld from './components/Sitzplatzplaner.vue';
+import Planer from './components/Sitzplatzplaner.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    Planer
   }
 });
 </script>

@@ -9,7 +9,6 @@
   </div>
   <div @mousedown="isMouseDown = true" @mouseup="isMouseDown = false">
     <div class="sideDiv">
-      <button @click="presetPageOpen = true" class="openPresetBtn"> Raumvorlagen öffnen </button>
       <!-- <img alt="Vue logo" src="@/assets/GMO_Schullogo.png" style="width:33%; margin-top:3%"> -->
       <div class="sliderDiv">
         <div class="sliderInformationDiv">
@@ -19,6 +18,9 @@
         </div>
         <div class="verticalSliderDiv"><input type="range" name="gridHeight" v-model="gridHeight" min="5" :max="maxGridHeight" class="inpSlider verticalSlider" /></div>
         <input type="range" name="gridWidth" v-model="gridWidth" min="5" :max="maxGridWidth" class="inpSlider horizontalSlider" />
+      </div>
+      <div>
+      <button @click="presetPageOpen = true" class="openPresetBtn"> Raumvorlagen öffnen </button>
       </div>
       <!-- <div class="sliderDiv">
     </div> -->
@@ -135,7 +137,7 @@
                     $event.target.value = -1;
                   "
                 >
-                  <option value="-1" selected disabled hidden>Schüler auswählen</option>
+                  <option value="-1" selected hidden>Schüler auswählen</option>
 
                   <option v-for="o in getNames()" :key="o">{{ o }}</option>
                 </select>
