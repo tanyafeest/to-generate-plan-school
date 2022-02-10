@@ -6,9 +6,9 @@ import compute from "./helper/Algorithm";
 
 /*  
   + TODO: blaue knöpfe
-vorlagenknopf
-möglichst nach vorne fixen
-nicht nach hinten
+  + vorlagenknopf
+? möglichst nach vorne fixen
+  + nicht nach hinten
 manuell zuweisen
 
 */
@@ -30,10 +30,12 @@ export default defineComponent({
       avoidRulesVisible: true,
       nearbyRulesVisible: true,
       firstRowRulesVisible: true,
+      notBackRulesVisible: true,
       studentFieldValue: "",
       nearbyRules: [] as Rule[],
       avoidRules: [] as Rule[],
       firstRowRules: [] as string[],
+      notBackRules: [] as string[],
       isMouseDown: false,
       presetCount: 3,
       presetPageOpen: false,
@@ -64,11 +66,16 @@ export default defineComponent({
     },
     studentFieldValue() {
       const names: string[] = this.getNames();
-      for (let i = this.firstRowRules.length - 1; i >= 0; i--) {
-        if (!names.includes(this.firstRowRules[i])) {
-          this.firstRowRules.splice(i, 1);
+      [this.firstRowRules, this.notBackRules].forEach((rules) =>
+      {
+        for (let i = rules.length - 1; i >= 0; i--)
+        {
+          if (!names.includes(rules[i]))
+          {
+            rules.splice(i, 1);
+          }
         }
-      }
+      });
 
       [this.avoidRules, this.nearbyRules].forEach((rules) => {
         for (let i = rules.length - 1; i >= 0; i--) {
@@ -88,6 +95,10 @@ export default defineComponent({
       if (this.isMouseDown) {
         this.onFieldClick(x, y);
       }
+    },
+    onFieldContextMenu()
+    {
+      this.log("a")
     },
     setPreset(i: number) {
       console.log("setPreset" + i);
@@ -155,9 +166,14 @@ export default defineComponent({
         this.firstRowRules.push(value);
       }
     },
+    addNotBackRow(value: string)
+    {
+      if (!this.notBackRules.includes(value)) {
+        this.notBackRules.push(value);
+      }
+    },
     computePlan() {
       console.log("cmpPLan");
-      console.log(this.avoidRules);
       this.resetNamesOnPlan();
       this.deleteUncompleteavoidRules();
       compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
@@ -179,8 +195,16 @@ export default defineComponent({
             return;
           }
         });
+        let notBackRow = false;
+        this.notBackRules.forEach((rule) => {
+          if (rule == student) {
+            notBackRow = true;
+            return;
+          }
+        });
         const s = new Student(student, [], []);
         s.frontRow = firstRow;
+        s.notBackOfTheRoom = notBackRow;
         studentList.push(s);
       });
 
@@ -292,5 +316,9 @@ export default defineComponent({
     log(a: any) {
       console.log(a);
     },
+    alert(a: any)
+    {
+      this.alert(a);
+    }
   },
 });

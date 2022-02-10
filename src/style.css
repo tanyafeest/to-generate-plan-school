@@ -201,6 +201,7 @@ table {
   background-color: rgb(222, 194, 255);
   padding-bottom: 3%;
   padding-top: 3%;
+  height: 50px;
 }
 .btn:hover {
   background-color: gray;
@@ -218,6 +219,7 @@ table {
   background-color: slateblue;
   /* line-height: 250%; */
   height: 50px;
+  border-bottom: darkslateblue 1px solid;
 }
 .submit:hover {
   background-color: darkslateblue;
@@ -343,7 +345,7 @@ input[type="file"]::file-selector-button:hover {
   /* background-color: slateblue; */
   /* background-color: rgb(200, 170, 233); */
   background-color: rgb(162, 139, 187);
-
+  height: auto;
   /* display: inline-block; */
   /* text-align: start; */
 }

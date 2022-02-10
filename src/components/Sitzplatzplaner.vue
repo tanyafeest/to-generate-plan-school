@@ -20,7 +20,7 @@
         <input type="range" name="gridWidth" v-model="gridWidth" min="5" :max="maxGridWidth" class="inpSlider horizontalSlider" />
       </div>
       <div>
-      <button @click="presetPageOpen = true" class="openPresetBtn"> Raumvorlagen öffnen </button>
+        <button @click="presetPageOpen = true" class="openPresetBtn">Raumvorlagen öffnen</button>
       </div>
       <!-- <div class="sliderDiv">
     </div> -->
@@ -134,10 +134,41 @@
                   style="width: 100%; height: 100%; margin-bottom: 2%; padding-bottom: 2%; text-align: center"
                   @change="
                     addFirstRow($event.target.value);
-                    $event.target.value = -1;
+                    $event.target.value = 0;
                   "
                 >
-                  <option value="-1" selected hidden>Schüler auswählen</option>
+                  <option value="0" selected hidden>Schüler auswählen</option>
+
+                  <option v-for="o in getNames()" :key="o">{{ o }}</option>
+                </select>
+                <!-- <button class="btn ruleBtn" @click="addRule(nearbyRules)">Neue Regel</button> -->
+              </div>
+            </transition>
+
+            <!-- notBackRow rules start -->
+
+            <button class="btn subBtn" @click="notBackRulesVisible = !notBackRulesVisible">
+              Nicht nach hinten&nbsp;&nbsp;
+              <i v-if="!notBackRulesVisible" class="arrowdown" />
+              <i v-if="notBackRulesVisible" class="arrowup" />
+            </button>
+            <transition name="openTransition">
+              <div class="ruleTypeDiv" v-if="notBackRulesVisible">
+                <div class="firstRowRulesWrap">
+                  <div class="singleRuleDiv firstRowRule" v-for="(_, i) in notBackRules.length" :key="i">
+                    <button class="deleteRule" @click="deleteRuleAt(parseInt(i), notBackRules)">X</button>
+                    {{ notBackRules[i] }}
+                  </div>
+                </div>
+                <select
+                  class="ruleSelect"
+                  style="width: 100%; height: 100%; margin-bottom: 2%; padding-bottom: 2%; text-align: center"
+                  @change="
+                    addNotBackRow($event.target.value);
+                    $event.target.value = 0;
+                  "
+                >
+                  <option value="0" selected hidden>Schüler auswählen</option>
 
                   <option v-for="o in getNames()" :key="o">{{ o }}</option>
                 </select>
@@ -149,6 +180,7 @@
       </div>
 
       <button name="compute" @click="computePlan" class="btn submit">Plan erstellen</button>
+      <button name="compute" @click="resetNamesOnPlan()" class="btn submit">Namen zurücksetzen</button>
       <span class="credits creditsWrap"
         >{{ "\n" }}Entwickelt von: {{ "\n" }}
         <a class="credits creditsA" href="https://github.com/Florik3ks" target="_blank">Florian E.</a>
@@ -187,16 +219,22 @@
             <button
               :key="sitzplaetze"
               class="fieldBtn"
-              @mousedown="onFieldClick(x, y)"
+              @mousedown.left="onFieldClick(x, y)"
               @mouseenter="onFieldClickWhenMouseIsDown(x, y)"
+              @contextmenu.prevent="log(x + ', ' + y)"
               :style="{
+                'font-size': 'medium', 
                 'background-color': isMarked(x, y) ? 'lightblue' : 'white',
                 border: isMarked(x, y) ? 'black 2px solid' : 'none',
                 'border-left': isMarked(x, y) ? (isMarked(x - 1, y) ? 'none' : 'black 1px solid') : 'none',
                 'border-top': isMarked(x, y) ? (isMarked(x, y - 1) ? 'none' : 'black 1px solid') : 'none',
               }"
               v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
-            ></button>
+            >
+            </button>
+              <!-- <span style="display: inline-block; height: 100%; text-align: left;align-content:center;">
+                {{ sitzplaetze[x.toString() + "," + y.toString()].name }}
+              </span> -->
           </td>
         </tr>
       </table>

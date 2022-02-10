@@ -7,7 +7,16 @@ export default function compute(sitzplaetze : Sitzplatz[], students : Student[])
     if (sitzplaetze.length < students.length)
     {
         alert("Es gibt weniger Plätze als Schüler")
+        return;
     }
+
+    
+    // kann später weg
+    for (let i = 0; i < students.length; i++) {
+        sitzplaetze[i].name = students[i].name;        
+    }
+    // ----
+
 
     const haveRule: Student[] = [];
     students.forEach(i => {
