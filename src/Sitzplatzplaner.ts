@@ -222,8 +222,8 @@ export default defineComponent({
           courseName = lines[i].split(",").filter((x) => x !== null && x !== "")[0];
         } else if (i > 1) {
           let name: string;
-          name = lines[i].split(",")[2] + " ";
-          name += lines[i].split(",")[1] + "\n";
+          name = lines[i].split(",")[2].replace('"',"") + " ";
+          name += lines[i].split(",")[1].replace('"',"") + "\n";
           if (name.trim().length > 0) {
             this.studentFieldValue += name;
           }
