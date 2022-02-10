@@ -216,7 +216,7 @@ export default defineComponent({
             this.loadNamesFromFile(result.toString());
           }
         };
-        reader.readAsText(file);
+        reader.readAsText(file, 'ISO-8859-1');
       } else {
         alert("Diese Datei ist keine CSV-Datei");
       }
@@ -227,11 +227,11 @@ export default defineComponent({
       this.studentFieldValue = "";
       for (let i = 0; i < lines.length; i++) {
         if (i == 0) {
-          courseName = lines[i].split(",").filter((x) => x !== null && x !== "")[0];
+          courseName = lines[i].split(";").filter((x) => x !== null && x !== "")[0];
         } else if (i > 1) {
           let name: string;
-          name = lines[i].split(",")[2] + " ";
-          name += lines[i].split(",")[1] + "\n";
+          name = lines[i].split(";")[2].replace(/"/g,"") + " ";
+          name += lines[i].split(";")[1].replace(/"/g,"") + "\n";
           if (name.trim().length > 0) {
             this.studentFieldValue += name;
           }
