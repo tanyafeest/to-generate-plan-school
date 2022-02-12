@@ -193,20 +193,31 @@
       </span>
     </div>
 
-    <!-- <div class="sitzplatzdiv">
-    <input type="range" name="gridWidth" v-model="gridWidth" min="5" :max="maxGridWidth" class="inpSlider horizontalSlider" />
-  </div> -->
     <div class="tafelDivOuter">
       <div class="tafelDivInner">TAFEL</div>
     </div>
     <div class="sitzplatzdiv">
-      <!-- <input type="range" name="gridHeight" v-model="gridHeight" min="5" :max="maxGridHeight" class="inpSlider verticalSlider" /><br /> -->
+      <div class="fieldBtnContextMenuDiv" v-if="fieldBtnContextMenuOpen" v-on:blur="fieldBtnContextMenuOpen = false" :style="{ top: contextMenuTop, left: contextMenuLeft }">
+        <select
+          class="fieldBtnContextSelect"
+          @change="
+            changeFieldBtnText($event.target.value);
+            fieldBtnContextMenuOpen = false
+          "
+        >
+          <option value="0" selected hidden>Schüler auswählen</option>
+          <option>  </option>
+          <option v-for="o in getNames()" :key="o">{{ o }}</option>
+        </select>
+      </div>
+
       <table>
         <tr v-for="(_, y) in parseInt(gridHeight)" :key="y">
           <td
             v-for="(_, x) in parseInt(gridWidth)"
             :key="x"
             class="t1"
+            @contextmenu.prevent
             :style="{
               height: 85 / parseInt(gridHeight) + 'vh',
               border: !isMarked(x, y) ? 'lightgrey 1px solid' : 'black 1px solid',
@@ -221,18 +232,17 @@
               class="fieldBtn"
               @mousedown.left="onFieldClick(x, y)"
               @mouseenter="onFieldClickWhenMouseIsDown(x, y)"
-              @contextmenu.prevent="log(x + ', ' + y)"
+              @contextmenu.prevent="onFieldContextMenu($event, x,y)"
               :style="{
-                'font-size': 'medium', 
+                'font-size': 'medium',
                 'background-color': isMarked(x, y) ? 'lightblue' : 'white',
                 border: isMarked(x, y) ? 'black 2px solid' : 'none',
                 'border-left': isMarked(x, y) ? (isMarked(x - 1, y) ? 'none' : 'black 1px solid') : 'none',
                 'border-top': isMarked(x, y) ? (isMarked(x, y - 1) ? 'none' : 'black 1px solid') : 'none',
               }"
               v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
-            >
-            </button>
-              <!-- <span style="display: inline-block; height: 100%; text-align: left;align-content:center;">
+            ></button>
+            <!-- <span style="display: inline-block; height: 100%; text-align: left;align-content:center;">
                 {{ sitzplaetze[x.toString() + "," + y.toString()].name }}
               </span> -->
           </td>

@@ -1,4 +1,4 @@
-import { defineComponent } from "vue";
+import { defineComponent  } from "vue";
 import { Sitzplatz } from "@/helper/Sitzplatz";
 import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
@@ -12,6 +12,8 @@ import compute from "./helper/Algorithm";
 manuell zuweisen
 
 */
+
+
 export default defineComponent({
   name: "Sitzplatzplaner",
   props: {},
@@ -39,6 +41,10 @@ export default defineComponent({
       isMouseDown: false,
       presetCount: 3,
       presetPageOpen: false,
+      fieldBtnContextMenuOpen: false,
+      contextMenuTop: "0px",
+      contextMenuLeft: "0px",
+      contextMenuOpenedBy: "",
       // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
@@ -66,6 +72,7 @@ export default defineComponent({
     },
     studentFieldValue() {
       const names: string[] = this.getNames();
+      // check rules
       [this.firstRowRules, this.notBackRules].forEach((rules) =>
       {
         for (let i = rules.length - 1; i >= 0; i--)
@@ -84,24 +91,57 @@ export default defineComponent({
           }
         }
       });
+
+      // check fields
+      for (const key in this.sitzplaetze)
+      {
+        const field = this.sitzplaetze[key];
+        if (!names.includes(field.name))
+        {
+          field.name = "";
+        }
+      }
     },
   },
   methods: {
     onFieldClick(x: number, y: number) {
       const platz: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
       platz.marked = !platz.marked;
+
+      if (!platz.marked && platz.name != "")
+      {
+        platz.name = ""
+      }
     },
     onFieldClickWhenMouseIsDown(x: number, y: number) {
       if (this.isMouseDown) {
         this.onFieldClick(x, y);
       }
     },
-    onFieldContextMenu()
+    onFieldContextMenu(e : any, x: number, y : number)
     {
-      this.log("a")
+      this.contextMenuTop = e.y + "px";
+      this.contextMenuLeft = e.x + "px";
+      this.contextMenuOpenedBy = x.toString() + "," + y.toString();
+      this.fieldBtnContextMenuOpen = true;
+    },
+    changeFieldBtnText(e : any)
+    {
+      if (e != "")
+      {
+        for (const key in this.sitzplaetze)
+        {
+          const field = this.sitzplaetze[key];
+          if (field.name == e)
+          {
+            field.name = "";
+          }
+        }
+      }
+      this.sitzplaetze[this.contextMenuOpenedBy].name = e;
+      this.sitzplaetze[this.contextMenuOpenedBy].marked = true;
     },
     setPreset(i: number) {
-      console.log("setPreset" + i);
       this.presetPageOpen = false;
       this.sitzplaetze = this.instantiateDict(this.maxGridWidth, this.maxGridHeight);
       switch (i) {
@@ -145,7 +185,7 @@ export default defineComponent({
     deleteRuleAt(i: number, ruleList: Rule[]) {
       ruleList.splice(i, 1);
     },
-    deleteUncompleteavoidRules() {
+    deleteUncompleteRules() {
       [this.avoidRules, this.nearbyRules].forEach((ruleList) => {
         for (let i = ruleList.length - 1; i >= 0; i--) {
           if (ruleList[i].student1 == "" || ruleList[i].student2 == "") {
@@ -174,8 +214,7 @@ export default defineComponent({
     },
     computePlan() {
       console.log("cmpPLan");
-      this.resetNamesOnPlan();
-      this.deleteUncompleteavoidRules();
+      this.deleteUncompleteRules();
       compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
     },
     findStudentInArrayByName(name: string, arr: Student[]) {
