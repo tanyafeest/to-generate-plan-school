@@ -59,24 +59,28 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
 
 function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
     if (unsolved.length == 0) {
+        console.log("no unsolved Students")
         return true;
     }
     for (let i = 0; i < seats.length; i++) {
         const seat = seats[i];
         const student = unsolved.shift()
         if (student == undefined) {
+            console.log("no unsolved Students 2")
             return true;
         }
         student.setSeat(seat);
         if (student.validate(false)) {
             const temp = seats.splice(i, 1);
             if (recSolve(unsolved, seats)) {
+                console.log("found seat for " + student.name + ": (" + temp[0].x + "|" + temp[0].y + ")")
                 return true;
             }
             seats.splice(i, 0, temp[0]);
         }
         student.unSeat();
     }
+    console.log("could not find combination for given combination of " + unsolved.length + " students.")
     return false;
 }
 
