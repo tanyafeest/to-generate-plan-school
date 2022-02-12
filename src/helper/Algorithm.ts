@@ -11,9 +11,9 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
 
 
     // kann später weg
-    for (let i = 0; i < students.length; i++) {
-        sitzplaetze[i].name = students[i].name;
-    }
+    // for (let i = 0; i < students.length; i++) {
+    //     sitzplaetze[i].name = students[i].name;
+    // }
     // ----
 
 
