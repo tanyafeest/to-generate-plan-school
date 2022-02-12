@@ -63,7 +63,7 @@ function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
         }
         student.setSeat(seat);
         if (student.validate(false)) {
-            let temp = seats.splice(i, 1);
+            const temp = seats.splice(i, 1);
             if (recSolve(unsolved, seats)) {
                 return true;
             }
