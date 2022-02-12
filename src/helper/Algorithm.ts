@@ -52,7 +52,7 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         unsolvedStudents.push(i);
     });
     recSolve(unsolvedStudents, unsolvedSeats);
-    return undefined;
+    return;
 }
 
 function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
