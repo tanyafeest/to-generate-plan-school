@@ -51,7 +51,9 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
     students.forEach(i => {
         unsolvedStudents.push(i);
     });
-    recSolve(unsolvedStudents, unsolvedSeats);
+    if (!recSolve(unsolvedStudents, unsolvedSeats)) {
+        alert("Keine Anordnung gefunden")
+    }
     return;
 }
 
