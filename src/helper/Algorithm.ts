@@ -56,6 +56,9 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
 }
 
 function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
+    if (unsolved.length == 0) {
+        return true;
+    }
     for (let i = 0; i < seats.length; i++) {
         const seat = seats[i];
         const student = unsolved.shift()
