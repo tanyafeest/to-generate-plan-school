@@ -209,6 +209,7 @@
           <option>  </option>
           <option v-for="o in getNames()" :key="o">{{ o }}</option>
         </select>
+      <button class="closeContextSelect" @click="fieldBtnContextMenuOpen = false">X</button>
       </div>
 
       <table>
