@@ -52,6 +52,7 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         unsolvedStudents.push(i);
     });
     recSolve(unsolvedStudents, unsolvedSeats);
+    return undefined;
 }
 
 function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
@@ -63,7 +64,7 @@ function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
         }
         student.setSeat(seat);
         if (student.validate(false)) {
-            let temp = seats.splice(i, 1);
+            const temp = seats.splice(i, 1);
             if (recSolve(unsolved, seats)) {
                 return true;
             }
