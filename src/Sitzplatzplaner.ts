@@ -216,6 +216,7 @@ export default defineComponent({
       console.log("cmpPLan");
       this.deleteUncompleteRules();
       compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
+      console.log(this.createStudentsFromRules());
     },
     findStudentInArrayByName(name: string, arr: Student[]) {
       for (const element of arr) {
@@ -262,6 +263,13 @@ export default defineComponent({
         if (s1 && s2) {
           s1.sitWith.push(s2);
           s2.sitWith.push(s1);
+        }
+      });
+
+      this.getUsedFieldsToComputePlan().forEach(field => {
+        if (field.name != "")
+        {
+          this.findStudentInArrayByName(field.name, studentList)?.setSeat(field);
         }
       });
 
