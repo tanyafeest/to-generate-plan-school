@@ -8,22 +8,20 @@ export class Student
     avoid : Student[];
     sitWith: Student[];
     affability = 0;
-    seat: Sitzplatz;
+    private defaultSeat: Sitzplatz;
+    private seat: Sitzplatz;
     seated = false;
     constructor(name: string, avoid: Student[] = [], sitWith: Student[] = []) {
         this.name = name;
         this.avoid = avoid;
         this.sitWith = sitWith;
-        this.seat = new Sitzplatz(-1, -1, false);
+        this.defaultSeat = new Sitzplatz(-1, -1, false);
+        this.seat = this.defaultSeat;
     }
 
-    public setSeat(seat: Sitzplatz) {
-        this.seat = seat;
-        seat.name = this.name;
-        this.seated = true;
-    }
-
+    
     public validate(final = true) {
+        // TODO: detecting rows 
         if (!this.seat.marked)
         {
             return false;
@@ -37,7 +35,7 @@ export class Student
         }
         for (let j = 0; j < this.sitWith.length; j++) {
             const toSitwith = this.sitWith[j];
-            if (!isClose(this.seat.x, this.seat.y, toSitwith.seat.x, toSitwith.seat.y) && final || toSitwith.seat.y != -1)
+            if (!isClose(this.seat.x, this.seat.y, toSitwith.seat.x, toSitwith.seat.y) && final || !toSitwith.seated)
             {
                 return false;
             }
@@ -45,12 +43,24 @@ export class Student
         return true;
     }
     
-
-    /**
-     * calculateAffability
-     */
     public calculateAffability() {
         this.affability = this.sitWith.length - this.avoid.length
+    }
+
+    public setSeat(seat: Sitzplatz) {
+        this.seat = seat;
+        seat.name = this.name;
+        this.seated = true;
+    }
+    
+    public unSeat() {
+        this.seat.name = "";
+        this.seat = this.defaultSeat;
+        this.seated = false;
+    }
+    
+    public getSeat() {
+        return this.seat;
     }
 }
 

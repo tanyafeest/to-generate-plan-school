@@ -2,18 +2,17 @@
 import { Sitzplatz } from './Sitzplatz';
 import { Student } from './Student';
 
-export default function compute(sitzplaetze : Sitzplatz[], students : Student[]){
+export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
 
-    if (sitzplaetze.length < students.length)
-    {
+    if (sitzplaetze.length < students.length) {
         alert("Es gibt weniger Plätze als Schüler")
         return;
     }
 
-    
+
     // kann später weg
     for (let i = 0; i < students.length; i++) {
-        sitzplaetze[i].name = students[i].name;        
+        sitzplaetze[i].name = students[i].name;
     }
     // ----
 
@@ -43,37 +42,49 @@ export default function compute(sitzplaetze : Sitzplatz[], students : Student[])
 
     orderByAffability(students);
 
+    const unsolvedSeats: Sitzplatz[] = [];
+    sitzplaetze.forEach(i => {
+        unsolvedSeats.push(i);
+    });
 
+    const unsolvedStudents: Student[] = [];
+    students.forEach(i => {
+        unsolvedStudents.push(i);
+    });
+    recSolve(unsolvedStudents, unsolvedSeats);
 }
 
-function recSolve(unsolved: Student[], seats: Sitzplatz[])
-{
+function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
     for (let i = 0; i < seats.length; i++) {
         const seat = seats[i];
-        if (seat.name == "")
-        {
-            unsolved[0].setSeat(seat);
-            if (unsolved[0].validate())
-            {
-                recSolve(unsolved, seats);
-            }
+        const student = unsolved.shift()
+        if (student == undefined) {
+            return true;
         }
+        student.setSeat(seat);
+        if (student.validate(false)) {
+            let temp = seats.splice(i, 1);
+            if (recSolve(unsolved, seats)) {
+                return true;
+            }
+            seats.splice(i, 0, temp[0]);
+        }
+        student.unSeat();
     }
+    return false;
 }
 
-function validate(students: Student[])
-{
+function validate(students: Student[]) {
     for (let i = 0; i < students.length; i++) {
         const student = students[i];
-        if (!student.validate())
-        {
+        if (!student.validate()) {
             return false;
         }
     }
     return true;
 }
 
-function orderByAffability(students:Student[]) {
+function orderByAffability(students: Student[]) {
     students.forEach(i => {
         i.calculateAffability();
     });
@@ -95,8 +106,8 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
             minY = i.y;
         }
     })
-    
-    const sitzplaetzeR  = [] as number[][];
+
+    const sitzplaetzeR = [] as number[][];
     for (let i = 0; i <= maxX; i++) {
         const row = [] as number[];
         for (let j = 0; j <= maxY; j++) {
@@ -119,11 +130,10 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
 
     quickSortNeighbours(sitzplaetze);
 
-    if (rows != undefined)
-    {
+    if (rows != undefined) {
         for (let i = 0; i < maxY - minY + 1; i++) {
             rows.push([]);
-            
+
         }
         sitzplaetze.forEach(i => {
             rows[i.y - minY].push(i);
@@ -133,12 +143,12 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
 }
 
 function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
-    if (sitzplaetze.length > 1){
+    if (sitzplaetze.length > 1) {
         const compare: any = sitzplaetze.pop();
         const less: Sitzplatz[] = [];
         const more: Sitzplatz[] = [];
         sitzplaetze.forEach(i => {
-            if (i.neighbours <= compare.neighbours){
+            if (i.neighbours <= compare.neighbours) {
                 less.push(i);
             }
             else {
@@ -153,12 +163,12 @@ function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
 }
 
 function quickSortAffability(students: Student[]) {
-    if (students.length > 1){
+    if (students.length > 1) {
         const compare: any = students.pop();
         const less = [] as Student[]
         const more = [] as Student[]
         students.forEach(i => {
-            if (i.affability <= compare.affability){
+            if (i.affability <= compare.affability) {
                 less.push(i);
             }
             else {
@@ -190,7 +200,7 @@ function maxLimit(input: number, limit: number) {
     }
 }
 
-function matchLists(l1: [], l2: []){
+function matchLists(l1: [], l2: []) {
     //takes two lists and returns true if any element of the first is also in the second.
     l1.forEach(i => {
         if (l2.includes(i)) {
