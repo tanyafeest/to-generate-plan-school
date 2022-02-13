@@ -78,6 +78,7 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
     if (!recSolve(unsolvedStudents, unsolvedSeats)) {
         alert("Keine Anordnung gefunden")
     }
+    console.log(validate(students));
     return;
 }
 
