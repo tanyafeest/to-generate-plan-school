@@ -44,7 +44,7 @@ export class Student
     }
     
     public calculateAffability() {
-        this.affability = this.sitWith.length - this.avoid.length
+        this.affability = this.sitWith.length*0.5 - this.avoid.length
     }
 
     public setSeat(seat: Sitzplatz) {

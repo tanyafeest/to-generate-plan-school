@@ -4,6 +4,8 @@ import { Student } from './Student';
 
 export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
 
+    console.log("1. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
+
     if (sitzplaetze.length < students.length) {
         alert("Es gibt weniger Plätze als Schüler")
         return;
@@ -20,6 +22,8 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         }
     });
 
+    console.log("2. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
+
     if (occupied.length > 0) {
         students.forEach(i => {
             for (let j = 0; j < occupied.length; j++) {
@@ -34,6 +38,7 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         });
     }
 
+    console.log("2.1 students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
     // kann später weg
     // for (let i = 0; i < students.length; i++) {
     //     sitzplaetze[i].name = students[i].name;
@@ -54,6 +59,8 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         }
     });
 
+    console.log("2.2 students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
+
     const frontSeatStudents: Student[] = [];
     students.forEach(i => {
         if (i.frontRow) {
@@ -61,10 +68,13 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         }
     });
 
+    console.log("2.3 students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
     const rows: Sitzplatz[][] = [];
     calculateNeighbours(sitzplaetze, rows);
 
+    console.log("3. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
     orderByAffability(students);
+    console.log("4. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
 
     const unsolvedSeats: Sitzplatz[] = [];
     sitzplaetze.forEach(i => {
@@ -83,6 +93,7 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
 }
 
 function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
+    console.log("unsolved.length = " + unsolved.length + ", seats.length = " + seats.length)
     if (unsolved.length == 0) {
         console.log("no unsolved Students")
         return true;
@@ -124,7 +135,8 @@ function orderByAffability(students: Student[]) {
     students.forEach(i => {
         i.calculateAffability();
     });
-    quickSortAffability(students);
+    students.sort((a, b) => a.affability - b.affability);
+    console.log(students);
 }
 
 function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { // calculates the number of neighbours for every seat and sorts the given array, also calculates front Seats.
@@ -164,8 +176,9 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
         i.neighbours = sitzplaetzeR[i.x][i.y];
     })
 
-    quickSortNeighbours(sitzplaetze);
+    sitzplaetze.sort((a, b) => a.neighbours - b.neighbours);
 
+    console.log(sitzplaetze);
     if (rows != undefined) {
         for (let i = 0; i < maxY - minY + 1; i++) {
             rows.push([]);
@@ -178,7 +191,7 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
 
 }
 
-function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
+/* function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
     if (sitzplaetze.length > 1) {
         const compare: any = sitzplaetze.pop();
         const less: Sitzplatz[] = [];
@@ -196,9 +209,9 @@ function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
         less.push(compare)
         sitzplaetze = less.concat(more);
     }
-}
+} */
 
-function quickSortAffability(students: Student[]) {
+/* function quickSortAffability(students: Student[]) {
     if (students.length > 1) {
         const compare: any = students.pop();
         const less = [] as Student[]
@@ -216,7 +229,7 @@ function quickSortAffability(students: Student[]) {
         less.push(compare)
         students = less.concat(more);
     }
-}
+} */
 
 function minLimit(input: number, limit: number) {
     if (input >= limit) {
