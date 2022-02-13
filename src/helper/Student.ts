@@ -53,7 +53,7 @@ export class Student
         }
         this.unSeat();
         if (seat.name != "") {
-            alert(this.name + " hat versucht sich auf einen bereits von " + seat.name + " belegten Stuhl and der Position (" + seat.x + "|" + seat.y + ") zu setzen. Er wurde davon abgehalten, und bleibt ohne Sitzplatz.");
+            console.log(this.name + " hat versucht sich auf einen bereits von " + seat.name + " belegten Stuhl and der Position (" + seat.x + "|" + seat.y + ") zu setzen. Er wurde davon abgehalten, und bleibt ohne Sitzplatz.");
             return;
         }
         this.seat = seat;
