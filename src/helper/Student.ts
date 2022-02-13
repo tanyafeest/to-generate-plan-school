@@ -48,7 +48,7 @@ export class Student
     }
 
     public setSeat(seat: Sitzplatz) {
-        if (this.seated) {
+        if (this.seated && this.seat != seat) {
             console.log(this.name + " hat versucht, sich auf einen Stuhl zu setzen (" + seat.x + "|" + seat.y + "), ohne vorher von seinem ursprünglichen (" + this.seat.x + "|" + this.seat.y + ") aufzustehen. Er wird zum Aufstehen gebracht.")
         }
         this.unSeat();
