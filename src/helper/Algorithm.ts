@@ -7,15 +7,26 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         alert("Es gibt weniger Plätze als Schüler")
         return;
     }
-
+    
+    console.log(students);
+    console.log(students[0].seated)
+    
     students.forEach(i => {
         i.unSeat();
     });
-
+    
+    
     const occupied: Sitzplatz[] = [];
     sitzplaetze.forEach(i => {
         if (i.name != "") {
             occupied.push(i);
+        }
+    });
+
+    const unsolvedSeats: Sitzplatz[] = [];
+    sitzplaetze.forEach(i => {
+        if (!occupied.includes(i)) {
+            unsolvedSeats.push(i);
         }
     });
 
@@ -32,6 +43,13 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
             }
         });
     }
+
+    const unsolvedStudents: Student[] = [];
+    students.forEach(i => {
+        if (!i.seated) {
+            unsolvedStudents.push(i);
+        }
+    });
 
     // kann später weg
     // for (let i = 0; i < students.length; i++) {
@@ -65,31 +83,23 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
 
     orderByAffability(students);
 
-    const unsolvedSeats: Sitzplatz[] = [];
-    sitzplaetze.forEach(i => {
-        unsolvedSeats.push(i);
-    });
-
-    const unsolvedStudents: Student[] = [];
-    students.forEach(i => {
-        unsolvedStudents.push(i);
-    });
     if (!recSolve(unsolvedStudents, unsolvedSeats)) {
-        alert("Keine Anordnung gefunden")
+        alert("Keine Anordnung gefunden");
     }
-    console.log(validate(students, false));
+    console.log(validate(students, true));
     return;
 }
 
 function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
     console.log("unsolved.length = " + unsolved.length + ", seats.length = " + seats.length)
     if (unsolved.length == 0) {
-        console.log("no unsolved Students")
+        console.log("no unsolved Students");
         return true;
     }
     for (let i = 0; i < seats.length; i++) {
         const seat = seats[i];
         const student = unsolved.shift()
+        console.log("seats.length    = " + seats.length + ". Trying to match Student " + student?.name + " to seat at (" + seat.x + "|" + seat.y + ")");
         if (student == undefined) {
             console.log("no unsolved Students 2")
             return true;
@@ -98,7 +108,7 @@ function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
         if (student.validate(false)) {
             const temp = seats.splice(i, 1);
             if (recSolve(unsolved, seats)) {
-                console.log("found seat for " + student.name + ": (" + temp[0].x + "|" + temp[0].y + ")")
+                console.log("found seat for " + student.name + ": (" + temp[0].x + "|" + temp[0].y + ")");
                 return true;
             }
             seats.splice(i, 0, temp[0]);
@@ -157,7 +167,6 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
         for (let j = Math.max(i.x - 1, 0); j <= Math.min(i.x + 1, maxX); j++) {
             for (let k = Math.max(i.y - 1, 0); k <= Math.min(i.y + 1, maxY); k++) {
                 sitzplaetzeR[j][k]++;
-                console.log("added neighbour on (" + j + "|" + k + ").")
             }
         }
     })

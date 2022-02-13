@@ -8,15 +8,15 @@ export class Student
     avoid : Student[];
     sitWith: Student[];
     affability = 0;
-    private defaultSeat: Sitzplatz;
+    private dummySeat: Sitzplatz;
     private seat: Sitzplatz;
     seated = false;
     constructor(name: string, avoid: Student[] = [], sitWith: Student[] = []) {
         this.name = name;
         this.avoid = avoid;
         this.sitWith = sitWith;
-        this.defaultSeat = new Sitzplatz(-1, -1, false);
-        this.seat = this.defaultSeat;
+        this.dummySeat = new Sitzplatz(-1, -1, false);
+        this.seat = this.dummySeat;
     }
 
     
@@ -63,7 +63,7 @@ export class Student
     
     public unSeat() {
         this.seat.name = "";
-        this.seat = this.defaultSeat;
+        this.seat = this.dummySeat;
         this.seated = false;
     }
     
