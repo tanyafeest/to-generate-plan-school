@@ -266,12 +266,12 @@ export default defineComponent({
         }
       });
 
-      this.getUsedFieldsToComputePlan().forEach(field => {
-        if (field.name != "")
-        {
-          this.findStudentInArrayByName(field.name, studentList)?.setSeat(field);
-        }
-      });
+      // this.getUsedFieldsToComputePlan().forEach(field => {
+      //   if (field.name != "")
+      //   {
+      //     this.findStudentInArrayByName(field.name, studentList)?.setSeat(field);
+      //   }
+      // });
 
       return studentList;
     },
