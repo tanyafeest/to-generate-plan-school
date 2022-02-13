@@ -3,7 +3,6 @@ import { Sitzplatz } from './Sitzplatz';
 import { Student } from './Student';
 
 export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
-
     if (sitzplaetze.length < students.length) {
         alert("Es gibt weniger Plätze als Schüler")
         return;
@@ -78,10 +77,12 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
     if (!recSolve(unsolvedStudents, unsolvedSeats)) {
         alert("Keine Anordnung gefunden")
     }
+    console.log(validate(students, false));
     return;
 }
 
 function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
+    console.log("unsolved.length = " + unsolved.length + ", seats.length = " + seats.length)
     if (unsolved.length == 0) {
         console.log("no unsolved Students")
         return true;
@@ -109,10 +110,10 @@ function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
     return false;
 }
 
-function validate(students: Student[]) {
+function validate(students: Student[], final = true) {
     for (let i = 0; i < students.length; i++) {
         const student = students[i];
-        if (!student.validate()) {
+        if (!student.validate(final)) {
             return false;
         }
     }
@@ -123,7 +124,8 @@ function orderByAffability(students: Student[]) {
     students.forEach(i => {
         i.calculateAffability();
     });
-    quickSortAffability(students);
+    students.sort((a, b) => a.affability - b.affability);
+    console.log(students);
 }
 
 function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { // calculates the number of neighbours for every seat and sorts the given array, also calculates front Seats.
@@ -152,9 +154,10 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
     }
 
     sitzplaetze.forEach(i => {
-        for (let j = minLimit(i.x - 1, 0); j <= maxLimit(i.x + 1, maxX); j++) {
-            for (let k = minLimit(i.y - 1, 0); k <= maxLimit(i.y + 1, maxX); k++) {
+        for (let j = Math.max(i.x - 1, 0); j <= Math.min(i.x + 1, maxX); j++) {
+            for (let k = Math.max(i.y - 1, 0); k <= Math.min(i.y + 1, maxY); k++) {
                 sitzplaetzeR[j][k]++;
+                console.log("added neighbour on (" + j + "|" + k + ").")
             }
         }
     })
@@ -163,8 +166,9 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
         i.neighbours = sitzplaetzeR[i.x][i.y];
     })
 
-    quickSortNeighbours(sitzplaetze);
+    sitzplaetze.sort((a, b) => a.neighbours - b.neighbours);
 
+    console.log(sitzplaetze);
     if (rows != undefined) {
         for (let i = 0; i < maxY - minY + 1; i++) {
             rows.push([]);
@@ -177,7 +181,7 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
 
 }
 
-function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
+/* function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
     if (sitzplaetze.length > 1) {
         const compare: any = sitzplaetze.pop();
         const less: Sitzplatz[] = [];
@@ -195,9 +199,9 @@ function quickSortNeighbours(sitzplaetze: Sitzplatz[]) {
         less.push(compare)
         sitzplaetze = less.concat(more);
     }
-}
+} */
 
-function quickSortAffability(students: Student[]) {
+/* function quickSortAffability(students: Student[]) {
     if (students.length > 1) {
         const compare: any = students.pop();
         const less = [] as Student[]
@@ -215,7 +219,7 @@ function quickSortAffability(students: Student[]) {
         less.push(compare)
         students = less.concat(more);
     }
-}
+} */
 
 function minLimit(input: number, limit: number) {
     if (input >= limit) {
