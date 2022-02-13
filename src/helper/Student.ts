@@ -35,7 +35,7 @@ export class Student
         }
         for (let j = 0; j < this.sitWith.length; j++) {
             const toSitwith = this.sitWith[j];
-            if (!isClose(this.seat.x, this.seat.y, toSitwith.seat.x, toSitwith.seat.y) && final || !toSitwith.seated)
+            if (!isClose(this.seat.x, this.seat.y, toSitwith.seat.x, toSitwith.seat.y) && final || toSitwith.seated && !isClose(this.seat.x, this.seat.y, toSitwith.seat.x, toSitwith.seat.y))
             {
                 return false;
             }
