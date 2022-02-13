@@ -1,4 +1,4 @@
-import { defineComponent  } from "vue";
+import { defineComponent } from "vue";
 import { Sitzplatz } from "@/helper/Sitzplatz";
 import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
@@ -20,7 +20,6 @@ export default defineComponent({
   data() {
     const maxGridWidth = 15;
     const maxGridHeight = 15;
-
     return {
       maxGridWidth: maxGridWidth,
       maxGridHeight: maxGridHeight,
@@ -120,10 +119,40 @@ export default defineComponent({
     },
     onFieldContextMenu(e : any, x: number, y : number)
     {
-      this.contextMenuTop = e.y + "px";
-      this.contextMenuLeft = e.x + "px";
+      const h1 = document.getElementById("wrapperDiv")?.offsetHeight;
+      const w1 = document.getElementById("wrapperDiv")?.offsetWidth;
+      console.log("a")
+      console.log(h1 + "," + w1)
+      console.log(e.y + "," + e.x)
+      let w = e.x;
+      let h = e.y;
+
+      if (h1 && w1)
+      {
+        const largestHeight = screen.availHeight - 105;
+        const largestWidth = screen.availWidth - 255;
+        if (e.y > largestHeight)
+        {
+          console.log("too tall")
+          h = largestHeight
+        }
+        if (e.x > largestWidth)
+        {
+          console.log("too wide")
+          w = largestWidth
+        }
+      }
+
+      this.contextMenuTop = h + "px"
+      this.contextMenuLeft = w + "px"
+
       this.contextMenuOpenedBy = x.toString() + "," + y.toString();
       this.fieldBtnContextMenuOpen = true;
+    
+      this.$nextTick(() =>
+      {
+        document.getElementById('fieldSelectionID')?.focus()
+      });
     },
     changeFieldBtnText(e : any)
     {

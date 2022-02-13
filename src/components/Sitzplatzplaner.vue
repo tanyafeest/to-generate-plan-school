@@ -7,7 +7,7 @@
       </button>
     </div>
   </div>
-  <div @mousedown="isMouseDown = true" @mouseup="isMouseDown = false">
+  <div @mousedown.left="isMouseDown = true" @mouseup.left="isMouseDown = false" id="wrapperDiv">
     <div class="sideDiv">
       <!-- <img alt="Vue logo" src="@/assets/GMO_Schullogo.png" style="width:33%; margin-top:3%"> -->
       <div class="sliderDiv">
@@ -199,17 +199,19 @@
     <div class="sitzplatzdiv">
       <div class="fieldBtnContextMenuDiv" v-if="fieldBtnContextMenuOpen" v-on:blur="fieldBtnContextMenuOpen = false" :style="{ top: contextMenuTop, left: contextMenuLeft }">
         <select
+          id="fieldSelectionID"
           class="fieldBtnContextSelect"
           @change="
             changeFieldBtnText($event.target.value);
             fieldBtnContextMenuOpen = false
           "
+          @blur="fieldBtnContextMenuOpen = false"
         >
           <option value="0" selected hidden>Schüler auswählen</option>
           <option>  </option>
           <option v-for="o in getNames()" :key="o">{{ o }}</option>
         </select>
-      <button class="closeContextSelect" @click="fieldBtnContextMenuOpen = false">X</button>
+      <!-- <button class="closeContextSelect" @click="fieldBtnContextMenuOpen = false">X</button> -->
       </div>
 
       <table>
