@@ -52,7 +52,7 @@ export class Student
             console.log(this.name + " hat versucht, sich auf einen Stuhl zu setzen (" + seat.x + "|" + seat.y + "), ohne vorher von seinem ursprünglichen (" + this.seat.x + "|" + this.seat.y + ") aufzustehen. Er wird zum Aufstehen gebracht.")
         }
         this.unSeat();
-        if (seat.name != "") {
+        if (seat.name != "" && seat.name != this.name) {
             console.log(this.name + " hat versucht sich auf einen bereits von " + seat.name + " belegten Stuhl and der Position (" + seat.x + "|" + seat.y + ") zu setzen. Er wurde davon abgehalten, und bleibt ohne Sitzplatz.");
             return;
         }
