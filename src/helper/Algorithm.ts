@@ -3,9 +3,6 @@ import { Sitzplatz } from './Sitzplatz';
 import { Student } from './Student';
 
 export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
-
-    console.log("1. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
-
     if (sitzplaetze.length < students.length) {
         alert("Es gibt weniger Plätze als Schüler")
         return;
@@ -22,8 +19,6 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         }
     });
 
-    console.log("2. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
-
     if (occupied.length > 0) {
         students.forEach(i => {
             for (let j = 0; j < occupied.length; j++) {
@@ -38,7 +33,6 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         });
     }
 
-    console.log("2.1 students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
     // kann später weg
     // for (let i = 0; i < students.length; i++) {
     //     sitzplaetze[i].name = students[i].name;
@@ -59,8 +53,6 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         }
     });
 
-    console.log("2.2 students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
-
     const frontSeatStudents: Student[] = [];
     students.forEach(i => {
         if (i.frontRow) {
@@ -68,13 +60,10 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         }
     });
 
-    console.log("2.3 students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
     const rows: Sitzplatz[][] = [];
     calculateNeighbours(sitzplaetze, rows);
 
-    console.log("3. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
     orderByAffability(students);
-    console.log("4. students.length = " + students.length + ", sitzplaetze.length = " + sitzplaetze.length)
 
     const unsolvedSeats: Sitzplatz[] = [];
     sitzplaetze.forEach(i => {
@@ -88,7 +77,7 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
     if (!recSolve(unsolvedStudents, unsolvedSeats)) {
         alert("Keine Anordnung gefunden")
     }
-    console.log(validate(students));
+    console.log(validate(students, false));
     return;
 }
 
@@ -121,10 +110,10 @@ function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
     return false;
 }
 
-function validate(students: Student[]) {
+function validate(students: Student[], final = true) {
     for (let i = 0; i < students.length; i++) {
         const student = students[i];
-        if (!student.validate()) {
+        if (!student.validate(final)) {
             return false;
         }
     }
@@ -165,9 +154,10 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
     }
 
     sitzplaetze.forEach(i => {
-        for (let j = minLimit(i.x - 1, 0); j <= maxLimit(i.x + 1, maxX); j++) {
-            for (let k = minLimit(i.y - 1, 0); k <= maxLimit(i.y + 1, maxX); k++) {
+        for (let j = Math.max(i.x - 1, 0); j <= Math.min(i.x + 1, maxX); j++) {
+            for (let k = Math.max(i.y - 1, 0); k <= Math.min(i.y + 1, maxY); k++) {
                 sitzplaetzeR[j][k]++;
+                console.log("added neighbour on (" + j + "|" + k + ").")
             }
         }
     })
