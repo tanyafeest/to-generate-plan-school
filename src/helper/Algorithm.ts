@@ -79,6 +79,7 @@ function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
             seats.splice(i, 0, temp[0]);
         }
         student.unSeat();
+        unsolved.unshift(student);
     }
     console.log("could not find combination for given combination of " + unsolved.length + " students.")
     return false;

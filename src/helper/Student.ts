@@ -49,9 +49,13 @@ export class Student
 
     public setSeat(seat: Sitzplatz) {
         if (this.seated) {
-            alert(this.name + " hat versucht, sich auf einen Stuhl zu setzen (" + seat.x + "|" + seat.y + "), ohne vorher von seinem ursprünglichen (" + this.seat.x + "|" + this.seat.y + ") aufzustehen. Er wird zum aufstehen gebracht.")
+            console.log(this.name + " hat versucht, sich auf einen Stuhl zu setzen (" + seat.x + "|" + seat.y + "), ohne vorher von seinem ursprünglichen (" + this.seat.x + "|" + this.seat.y + ") aufzustehen. Er wird zum Aufstehen gebracht.")
         }
         this.unSeat();
+        if (seat.name != "") {
+            alert(this.name + " hat versucht sich auf einen bereits von " + seat.name + " belegten Stuhl and der Position (" + seat.x + "|" + seat.y + ") zu setzen. Er wurde davon abgehalten, und bleibt ohne Sitzplatz.");
+            return;
+        }
         this.seat = seat;
         seat.name = this.name;
         this.seated = true;
