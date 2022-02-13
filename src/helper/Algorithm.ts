@@ -9,6 +9,30 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
         return;
     }
 
+    students.forEach(i => {
+        i.unSeat();
+    });
+
+    const occupied: Sitzplatz[] = [];
+    sitzplaetze.forEach(i => {
+        if (i.name != "") {
+            occupied.push(i);
+        }
+    });
+
+    if (occupied.length > 0) {
+        students.forEach(i => {
+            for (let j = 0; j < occupied.length; j++) {
+                const occupiedSeat = occupied[j];
+                if (i.name == occupiedSeat.name) {
+                    i.setSeat(occupiedSeat);
+                    if (occupiedSeat != occupied.splice(j, 1)[0]) {
+                        alert("Irgendetwas ist beim Setzen der Schüler an ihre voreingestellten Sitzplaetze schiefgegeangen.")
+                    }
+                }
+            }
+        });
+    }
 
     // kann später weg
     // for (let i = 0; i < students.length; i++) {
