@@ -88,7 +88,8 @@
             "
           > -->
             <button class="btn subBtn" @click="nearbyRulesVisible = !nearbyRulesVisible">
-              Sollen möglichst nebeneinander&nbsp;&nbsp;
+              Sollen nebeneinander&nbsp;&nbsp;
+              <!-- Sollen möglichst nebeneinander&nbsp;&nbsp; -->
               <i v-if="!nearbyRulesVisible" class="arrowdown" />
               <i v-if="nearbyRulesVisible" class="arrowup" />
             </button>
@@ -117,7 +118,8 @@
             "
           > -->
             <button class="btn subBtn" @click="firstRowRulesVisible = !firstRowRulesVisible">
-              Möglichst nach vorne&nbsp;&nbsp;
+              Nach vorne&nbsp;&nbsp;
+              <!-- Möglichst nach vorne&nbsp;&nbsp; -->
               <i v-if="!firstRowRulesVisible" class="arrowdown" />
               <i v-if="firstRowRulesVisible" class="arrowup" />
             </button>

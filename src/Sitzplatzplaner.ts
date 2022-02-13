@@ -3,6 +3,7 @@ import { Sitzplatz } from "@/helper/Sitzplatz";
 import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
 import compute from "./helper/Algorithm";
+import compute2 from "./helper/Algo";
 
 /*  
   + TODO: blaue knöpfe
@@ -121,9 +122,6 @@ export default defineComponent({
     {
       const h1 = document.getElementById("wrapperDiv")?.offsetHeight;
       const w1 = document.getElementById("wrapperDiv")?.offsetWidth;
-      console.log("a")
-      console.log(h1 + "," + w1)
-      console.log(e.y + "," + e.x)
       let w = e.x;
       let h = e.y;
 
@@ -133,12 +131,10 @@ export default defineComponent({
         const largestWidth = screen.availWidth - 255;
         if (e.y > largestHeight)
         {
-          console.log("too tall")
           h = largestHeight
         }
         if (e.x > largestWidth)
         {
-          console.log("too wide")
           w = largestWidth
         }
       }
@@ -245,7 +241,7 @@ export default defineComponent({
       console.log("cmpPLan");
       this.deleteUncompleteRules();
       compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
-      console.log(this.createStudentsFromRules());
+      // compute2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
     },
     findStudentInArrayByName(name: string, arr: Student[]) {
       for (const element of arr) {
@@ -373,8 +369,8 @@ export default defineComponent({
     },
     getUsedFieldsToComputePlan() {
       const fields: Sitzplatz[] = [];
-      for (let x = 0; x < this.gridWidth; x++) {
-        for (let y = 0; y < this.gridHeight; y++) {
+      for (let y = 0; y < this.gridHeight; y++) {
+        for (let x = 0; x < this.gridWidth; x++) {
           const field: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
           if (field.marked) {
             fields.push(field);
