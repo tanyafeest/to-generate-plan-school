@@ -1,8 +1,6 @@
 * {
     font-size: large;
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none;
+    color: black;
 }
 
 .presetDiv {
@@ -82,7 +80,7 @@
     width: 100%;
 }
 .t1 {
-    /* border: 2px solid lightgrey; */
+    border: 2px solid lightgrey;
     padding: 0;
     border-collapse: collapse;
     border-spacing: 0;
