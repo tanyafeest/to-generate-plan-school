@@ -7,6 +7,8 @@ export class Sitzplatz
     marked: boolean;
     name: string;
     neighbours = -1;
+    frontRow = false;
+    backrow = false;
     constructor(x: number, y: number, marked: boolean) {
         this.x = x;
         this.y = y;

@@ -22,14 +22,22 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
             occupied.push(i);
         }
     });
-
+    
+    calculateNeighbours(sitzplaetze, true);
+    
+    const unsolvedFrontSeats: Sitzplatz[] = [];
     const unsolvedSeats: Sitzplatz[] = [];
     sitzplaetze.forEach(i => {
         if (!occupied.includes(i)) {
-            unsolvedSeats.push(i);
+            if (i.frontRow) {
+                unsolvedFrontSeats.push(i);
+            }
+            else {
+                unsolvedSeats.push(i);
+            }
         }
     });
-
+    
     if (occupied.length > 0) {
         students.forEach(i => {
             for (let j = 0; j < occupied.length; j++) {
@@ -43,13 +51,24 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
             }
         });
     }
+    
+    // occupied is empty from here on
+    
+    orderByAffability(students);
 
-    const unsolvedStudents: Student[] = [];
+    const unsolvedFrontSeatStudents: Student[] = [];
+    const unsolvedStudents: Student[] = []; // does NOT include front seat Students
     students.forEach(i => {
         if (!i.seated) {
-            unsolvedStudents.push(i);
+            if (i.frontRow) {
+                unsolvedFrontSeatStudents.push(i);
+            }
+            else {
+                unsolvedStudents.push(i);
+            }
         }
     });
+
 
     // kann später weg
     // for (let i = 0; i < students.length; i++) {
@@ -58,50 +77,28 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[]) {
     // ----
 
 
-    const haveRule: Student[] = [];
-    students.forEach(i => {
-        if (i.frontRow) {
-            haveRule.push(i);
-        }
-        else if (i.avoid.length != 0) {
-            haveRule.push(i);
-        }
-        else if (i.sitWith.length != 0) {
-            haveRule.push(i);
-        }
-    });
 
-    const frontSeatStudents: Student[] = [];
-    students.forEach(i => {
-        if (i.frontRow) {
-            frontSeatStudents.push(i);
-        }
-    });
 
-    const rows: Sitzplatz[][] = [];
-    calculateNeighbours(sitzplaetze, rows);
 
-    orderByAffability(students);
-
-    if (!recSolve(unsolvedStudents, unsolvedSeats)) {
+    if (!recSolveTwice(unsolvedFrontSeatStudents, unsolvedFrontSeats, unsolvedStudents, unsolvedSeats)) {
         alert("Keine Anordnung gefunden");
     }
     console.log(validate(students, true));
     return;
 }
 
-function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
+function recSolveTwice(unsolved: Student[], seats: Sitzplatz[], nextUnsolved: Student[], nextSeats: Sitzplatz[]) {
     console.log("unsolved.length = " + unsolved.length + ", seats.length = " + seats.length)
-    if (unsolved.length == 0) {
+    if (unsolved.length == 0 && recSolve(nextUnsolved, seats.concat(nextSeats))) {
         console.log("no unsolved Students");
         return true;
     }
     for (let i = 0; i < seats.length; i++) {
         const seat = seats[i];
-        const student = unsolved.shift()
+        const student = unsolved.shift();
         console.log("seats.length    = " + seats.length + ". Trying to match Student " + student?.name + " to seat at (" + seat.x + "|" + seat.y + ")");
         if (student == undefined) {
-            console.log("no unsolved Students 2")
+            console.log("no unsolved Students, but this was detected in a way that should never happen");
             return true;
         }
         student.setSeat(seat);
@@ -116,7 +113,37 @@ function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
         student.unSeat();
         unsolved.unshift(student);
     }
-    console.log("could not find combination for given combination of " + unsolved.length + " students.")
+    console.log("could not find combination for given combination of " + unsolved.length + " students.");
+    return false;
+}
+
+function recSolve(unsolved: Student[], seats: Sitzplatz[]) {
+    console.log("unsolved.length = " + unsolved.length + ", seats.length = " + seats.length)
+    if (unsolved.length == 0) {
+        console.log("no unsolved Students");
+        return true;
+    }
+    for (let i = 0; i < seats.length; i++) {
+        const seat = seats[i];
+        const student = unsolved.shift();
+        console.log("seats.length    = " + seats.length + ". Trying to match Student " + student?.name + " to seat at (" + seat.x + "|" + seat.y + ")");
+        if (student == undefined) {
+            console.log("no unsolved Students, but this was detected in a way that should never happen");
+            return true;
+        }
+        student.setSeat(seat);
+        if (student.validate(false)) {
+            const temp = seats.splice(i, 1);
+            if (recSolve(unsolved, seats)) {
+                console.log("found seat for " + student.name + ": (" + temp[0].x + "|" + temp[0].y + ")");
+                return true;
+            }
+            seats.splice(i, 0, temp[0]);
+        }
+        student.unSeat();
+        unsolved.unshift(student);
+    }
+    console.log("could not find combination for given combination of " + unsolved.length + " students.");
     return false;
 }
 
@@ -138,7 +165,7 @@ function orderByAffability(students: Student[]) {
     console.log(students);
 }
 
-function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { // calculates the number of neighbours for every seat and sorts the given array, also calculates front Seats.
+function calculateNeighbours(sitzplaetze: Sitzplatz[], calculateRows = false) { // calculates the number of neighbours for every seat and sorts the given array, also calculates front Seats.
     let maxX = 0;
     let minY = 100000;
     let maxY = 0;
@@ -178,13 +205,14 @@ function calculateNeighbours(sitzplaetze: Sitzplatz[], rows?: Sitzplatz[][]) { /
     sitzplaetze.sort((a, b) => a.neighbours - b.neighbours);
 
     console.log(sitzplaetze);
-    if (rows != undefined) {
-        for (let i = 0; i < maxY - minY + 1; i++) {
-            rows.push([]);
-
-        }
+    if (calculateRows) {
         sitzplaetze.forEach(i => {
-            rows[i.y - minY].push(i);
+            if (i.y == minY) {
+                i.frontRow = true;
+            }
+            if (i.y == maxY) {
+                i.backrow = true;
+            }
         });
     }
 
