@@ -130,7 +130,7 @@ export default defineComponent({
     },
     touchend(e: Event, x: number, y: number)
     {
-      if (Date.now() - this.lastTouch > 500)
+      if (Date.now() - this.lastTouch > 200)
       {
         console.log("yay")
         this.onFieldContextMenu(e,x,y)
