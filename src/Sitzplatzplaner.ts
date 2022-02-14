@@ -45,6 +45,7 @@ export default defineComponent({
       contextMenuTop: "0px",
       contextMenuLeft: "0px",
       contextMenuOpenedBy: "",
+      lastTouch: 0,
       // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
@@ -118,25 +119,40 @@ export default defineComponent({
         this.onFieldClick(x, y);
       }
     },
+    preventctxmenudefault(e: Event)
+    {
+      e.preventDefault();
+    },
+    touchstart(x: number, y : number)
+    {
+      console.log("a")
+      this.lastTouch = Date.now();
+    },
+    touchend(e: Event, x: number, y: number)
+    {
+      if (Date.now() - this.lastTouch > 500)
+      {
+        console.log("yay")
+        this.onFieldContextMenu(e,x,y)
+        // this.fieldBtnContextMenuOpen = true;
+        // this.contextMenuOpenedBy = x.toString() + "," + y.toString();
+      }
+      this.lastTouch = Date.now();
+    },
     onFieldContextMenu(e : any, x: number, y : number)
     {
-      const h1 = document.getElementById("wrapperDiv")?.offsetHeight;
-      const w1 = document.getElementById("wrapperDiv")?.offsetWidth;
       let w = e.x;
       let h = e.y;
 
-      if (h1 && w1)
+      const largestHeight = screen.availHeight - 105;
+      const largestWidth = screen.availWidth - 255;
+      if (e.y > largestHeight)
       {
-        const largestHeight = screen.availHeight - 105;
-        const largestWidth = screen.availWidth - 255;
-        if (e.y > largestHeight)
-        {
-          h = largestHeight
-        }
-        if (e.x > largestWidth)
-        {
-          w = largestWidth
-        }
+        h = largestHeight
+      }
+      if (e.x > largestWidth)
+      {
+        w = largestWidth
       }
 
       this.contextMenuTop = h + "px"

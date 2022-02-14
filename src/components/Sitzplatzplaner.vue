@@ -226,8 +226,6 @@
             :style="{
               height: 85 / parseInt(gridHeight) + 'vh',
               border: !isMarked(x, y) ? 'lightgrey 1px solid' : 'black 1px solid',
-              'border-bottom': isMarked(x, y + 1) ? 'black 1px solid' : 'lightgrey 1px solid',
-              'border-right': isMarked(x + 1, y) ? 'black 1px solid' : 'lightgrey 1px solid',
 
             }"
           >
@@ -237,12 +235,12 @@
               @mousedown.left="onFieldClick(x, y)"
               @mouseenter="onFieldClickWhenMouseIsDown(x, y)"
               @contextmenu.prevent="onFieldContextMenu($event, x,y)"
+              @touchstart="touchstart(x,y)"
+              @touchend="touchend($event, x,y)"
               :style="{
                 'font-size': 'medium',
                 'background-color': isMarked(x, y) ? 'lightblue' : 'white',
                 border: isMarked(x, y) ? 'black 2px solid' : 'none',
-                'border-left': isMarked(x, y) ? (isMarked(x - 1, y) ? 'none' : 'black 1px solid') : 'none',
-                'border-top': isMarked(x, y) ? (isMarked(x, y - 1) ? 'none' : 'black 1px solid') : 'none',
               }"
               v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
             ></button>
