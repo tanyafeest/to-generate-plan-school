@@ -228,8 +228,7 @@
               border: !isMarked(x, y) ? 'lightgrey 1px solid' : 'black 1px solid',
               'border-bottom': isMarked(x, y + 1) ? 'black 1px solid' : 'lightgrey 1px solid',
               'border-right': isMarked(x + 1, y) ? 'black 1px solid' : 'lightgrey 1px solid',
-              'border-top': isMarked(x, y) ? 'black 1px solid' : 'lightgrey 1px solid',
-              'border-left': isMarked(x, y) ? 'black 1px solid' : 'lightgrey 1px solid',
+
             }"
           >
             <button

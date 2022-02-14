@@ -1,130 +1,133 @@
 * {
-  font-size: large;
+    font-size: large;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none;
 }
 
 .presetDiv {
-  position: fixed;
-  z-index: 1;
-  padding-top: 10vh;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: black;
-  background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    z-index: 1;
+    padding-top: 10vh;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 .presetContent {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 15px;
-  padding-top: 5px;
-  padding-right: 5px;
-  /* padding-top: 50px; */
-  border: 3px solid darkslateblue;
-  border-radius: 5px;
-  width: 50%;
-  height: 75vh;
-  display: inline-block;
-  overflow-x: hidden;
-  overflow-y: auto;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 15px;
+    padding-top: 5px;
+    padding-right: 5px;
+    /* padding-top: 50px; */
+    border: 3px solid darkslateblue;
+    border-radius: 5px;
+    width: 50%;
+    height: 75vh;
+    display: inline-block;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .openPresetBtn {
-  background-color: slateblue;
-  color: white;
-  border: 2px solid slateblue;
-  border-bottom-left-radius: 5px;
-  /* border-bottom-right-radius: 5px; */
-  padding: 10px;
-  padding-top: 7px;
-  transition: 0.3s;
-  width: 152px;
-  float: right;
+    background-color: slateblue;
+    color: white;
+    border: 2px solid slateblue;
+    border-bottom-left-radius: 5px;
+    /* border-bottom-right-radius: 5px; */
+    padding: 10px;
+    padding-top: 7px;
+    transition: 0.3s;
+    width: 152px;
+    float: right;
 }
 .openPresetBtn:hover {
-  background-color: darkslateblue;
-  border-color: darkslateblue;
+    background-color: darkslateblue;
+    border-color: darkslateblue;
 }
 .closePresetContent {
-  font-size: xx-large;
-  background-color: transparent;
-  border: none;
-  border-radius: 5px; /* for hovering */
-  transition: 0.3s;
-  float: right;
-  margin-left: 5px;
-  color: slateblue;
-  /* position: absolute;
+    font-size: xx-large;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px; /* for hovering */
+    transition: 0.3s;
+    float: right;
+    margin-left: 5px;
+    color: slateblue;
+    /* position: absolute;
   right: 24.5%;
   top: 8%; */
 }
 .closePresetContent:hover {
-  color: darkslateblue;
-  background-color: whitesmoke;
+    color: darkslateblue;
+    background-color: whitesmoke;
 }
 .presetBtn {
-  margin-top: 15px;
-  margin-left: 20px;
-  width: 40%;
-  padding-top: 5px;
-  background-color: white;
-  border: darkslateblue 2px solid;
-  border-radius: 5px;
-  transition: 0.3s;
+    margin-top: 15px;
+    margin-left: 20px;
+    width: 40%;
+    padding-top: 5px;
+    background-color: white;
+    border: darkslateblue 2px solid;
+    border-radius: 5px;
+    transition: 0.3s;
 }
 .presetBtn:hover {
-  background-color: lightgray;
+    background-color: lightgray;
 }
 .presetImg {
-  width: 100%;
+    width: 100%;
 }
 .t1 {
-  /* border: 2px solid lightgrey; */
-  padding: 0;
-  border-collapse: collapse;
-  border-spacing: 0;
+    /* border: 2px solid lightgrey; */
+    padding: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .tafelDivOuter {
-  justify-content: center;
-  display: flex;
-  margin-left: 25vw;
+    justify-content: center;
+    display: flex;
+    margin-left: 25vw;
 }
 .tafelDivInner {
-  border: 3px dashed;
-  background-color: rgb(206, 250, 223);
-  color: darkgreen;
-  border-color: var(--color);
-  width: 71vw;
-  height: 33px;
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding-top: 10px;
+    border: 3px dashed;
+    background-color: rgb(206, 250, 223);
+    color: darkgreen;
+    border-color: var(--color);
+    width: 71vw;
+    height: 33px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    padding-top: 10px;
 }
 .sitzplatzdiv {
-  justify-content: center;
-  display: flex;
-  margin-left: 25vw;
+    justify-content: center;
+    display: flex;
+    margin-left: 25vw;
 }
 .sideDiv {
-  width: 25vw;
-  height: 98vh;
-  position: absolute;
-  background-color: white;
-  border: 2px solid darkslateblue;
-  overflow-y: auto;
-  overflow-x: hidden;
-  justify-content: center;
-  border-radius: 3px;
+    width: 25vw;
+    height: 98vh;
+    position: absolute;
+    background-color: white;
+    border: 2px solid darkslateblue;
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: center;
+    border-radius: 3px;
 }
 .sliderDiv {
-  height: 150px;
-  width: 150px;
-  border: 2px solid darkslateblue;
-  border-top: none;
-  border-right: none;
-  /* border-bottom: none; */
-  float: right;
+    height: 150px;
+    width: 150px;
+    border: 2px solid darkslateblue;
+    border-top: none;
+    border-right: none;
+    /* border-bottom: none; */
+    float: right;
 }
 /* .verticalSliderDiv{
   height: 130px;
@@ -133,359 +136,359 @@
   right: -50px;
 } */
 .sliderInformationDiv {
-  border: solid black 2px;
-  margin: 1px;
-  height: 105px;
-  width: 105px;
-  justify-content: center;
-  display: grid;
-  vertical-align: bottom;
-  margin-right: 20px;
-  margin-left: 10px;
-  margin-top: 10px;
-  float: left;
+    border: solid black 2px;
+    margin: 1px;
+    height: 105px;
+    width: 105px;
+    justify-content: center;
+    display: grid;
+    vertical-align: bottom;
+    margin-right: 20px;
+    margin-left: 10px;
+    margin-top: 10px;
+    float: left;
 }
 .inpSlider {
-  max-width: 90%;
+    max-width: 90%;
 }
 .verticalSlider {
-  /* -webkit-appearance: slider-vertical; */
-  /* transform: rotate(180deg); */
-  /* float: right; */
-  margin-right: 2%;
-  /* width: 125px; */
-  width: 125px;
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  transform: rotate(90deg);
+    /* -webkit-appearance: slider-vertical; */
+    /* transform: rotate(180deg); */
+    /* float: right; */
+    margin-right: 2%;
+    /* width: 125px; */
+    width: 125px;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    transform: rotate(90deg);
 
-  height: 125px;
-  position: absolute;
-  top: 0px;
-  right: -55px;
+    height: 125px;
+    position: absolute;
+    top: 0px;
+    right: -55px;
 }
 .horizontalSlider {
-  margin-right: 20px;
-  margin-left: 1%;
-  margin-top: 5px;
-  height: 15px;
-  width: 125px;
+    margin-right: 20px;
+    margin-left: 1%;
+    margin-top: 5px;
+    height: 15px;
+    width: 125px;
 }
 table {
-  align-self: center;
-  border-collapse: collapse;
-  border-spacing: 0;
-  table-layout: fixed;
-  width: 71vw;
+    align-self: center;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    width: 71vw;
 }
 .fieldBtn {
-  width: 100%;
-  /* line-height: 250%; */
-  height: 100%;
-  border: none;
-  vertical-align: top;
-  transition: 0.3s;
+    width: 100%;
+    /* line-height: 250%; */
+    height: 100%;
+    border: none;
+    vertical-align: top;
+    transition: 0.3s;
 
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  hyphens: auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 .fieldBtn:hover {
-  filter: brightness(75%);
+    filter: brightness(75%);
 }
 .fieldBtnContextMenuDiv {
-  display: block;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  width: 250px;
-  height: 50px;
-  z-index: 999999;
-  top: 500px;
-  background-color: white;
-  border: 2px solid whitesmoke;
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    width: 250px;
+    height: 50px;
+    z-index: 999999;
+    top: 500px;
+    background-color: white;
+    border: 2px solid whitesmoke;
 }
 .fieldBtnContextSelect {
-  /* display: inline-block; */
-  /* width: 85%;
+    /* display: inline-block; */
+    /* width: 85%;
   float: left; */
-  width: 250px;
-  height: 50px;
-  padding-bottom: 5%;
-  padding-top: 3%;
-  text-align: center;
-  background-color: white;
-  border: none;
-  border-right: 2px solid whitesmoke;
+    width: 250px;
+    height: 50px;
+    padding-bottom: 5%;
+    padding-top: 3%;
+    text-align: center;
+    background-color: white;
+    border: none;
+    border-right: 2px solid whitesmoke;
 }
 .closeContextSelect {
-  background-color: white;
-  height: 100%;
-  font-size: xx-large;
-  border: none;
-  border-radius: 5px;
-  transition: 0.3s;
-  float: right;
-  color: slateblue;
+    background-color: white;
+    height: 100%;
+    font-size: xx-large;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+    float: right;
+    color: slateblue;
 }
 .closeContextSelect:hover {
-  color: darkslateblue;
-  background-color: whitesmoke;
+    color: darkslateblue;
+    background-color: whitesmoke;
 }
 .btn {
-  width: 100%;
-  /* height: 10%; */
-  /* height: 33px; */
-  /* line-height: 180%; */
-  border-radius: 0;
-  color: black;
-  border: none;
-  transition: 0.3s;
-  white-space: normal;
-  /* overflow: auto; */
-  /* background-color: rgb(213, 172, 255); */
-  background-color: rgb(222, 194, 255);
-  padding-bottom: 3%;
-  padding-top: 3%;
-  height: 50px;
+    width: 100%;
+    /* height: 10%; */
+    /* height: 33px; */
+    /* line-height: 180%; */
+    border-radius: 0;
+    color: black;
+    border: none;
+    transition: 0.3s;
+    white-space: normal;
+    /* overflow: auto; */
+    /* background-color: rgb(213, 172, 255); */
+    background-color: rgb(222, 194, 255);
+    padding-bottom: 3%;
+    padding-top: 3%;
+    height: 50px;
 }
 .btn:hover {
-  background-color: gray;
+    background-color: gray;
 }
 .ruleBtn {
-  background-color: white;
-  /* border: 1px solid rgb(222, 194, 255); */
-  border: 1px solid slateblue;
-  /* border: 1px solid darkslateblue; */
-  border-radius: 5px;
-  /* margin-top: 2%; */
+    background-color: white;
+    /* border: 1px solid rgb(222, 194, 255); */
+    border: 1px solid slateblue;
+    /* border: 1px solid darkslateblue; */
+    border-radius: 5px;
+    /* margin-top: 2%; */
 }
 .submit {
-  color: white;
-  background-color: slateblue;
-  /* line-height: 250%; */
-  height: 50px;
-  border-bottom: darkslateblue 1px solid;
+    color: white;
+    background-color: slateblue;
+    /* line-height: 250%; */
+    height: 50px;
+    border-bottom: darkslateblue 1px solid;
 }
 .submit:hover {
-  background-color: darkslateblue;
+    background-color: darkslateblue;
 }
 .arrowdown {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
 }
 .arrowup {
-  transform: rotate(225deg);
-  -webkit-transform: rotate(225deg);
+    transform: rotate(225deg);
+    -webkit-transform: rotate(225deg);
 }
 .arrowup,
 .arrowdown {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  /* display: inline-block; */
-  padding: 3px;
-  margin-top: 2%;
-  margin-right: 2%;
-  float: right;
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    /* display: inline-block; */
+    padding: 3px;
+    margin-top: 2%;
+    margin-right: 2%;
+    float: right;
 }
 .studentFieldWrap {
-  width: 100%;
-  vertical-align: top;
-  justify-content: center;
+    width: 100%;
+    vertical-align: top;
+    justify-content: center;
 }
 
 .studentFieldDiv {
-  font-size: x-large;
-  margin: 0;
-  border-radius: 0;
-  width: 100%;
-  /* height: 55.5vh; */
-  background-color: whitesmoke;
-  padding: 0;
-  resize: none;
-  box-sizing: border-box;
-  display: block;
+    font-size: x-large;
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
+    /* height: 55.5vh; */
+    background-color: whitesmoke;
+    padding: 0;
+    resize: none;
+    box-sizing: border-box;
+    display: block;
 }
 .studentField {
-  font-size: x-large;
-  margin: 0.5%;
-  border-radius: 3px;
-  width: 99%;
-  height: 33vh;
-  max-height: 100%;
-  background-color: whitesmoke;
-  padding: 0;
-  resize: none;
-  box-sizing: border-box;
-  display: block;
+    font-size: x-large;
+    margin: 0.5%;
+    border-radius: 3px;
+    width: 99%;
+    height: 33vh;
+    max-height: 100%;
+    background-color: whitesmoke;
+    padding: 0;
+    resize: none;
+    box-sizing: border-box;
+    display: block;
 }
 .studentField:focus {
-  outline: none !important;
-  border: 2px solid slateblue;
-  border-radius: 5px;
+    outline: none !important;
+    border: 2px solid slateblue;
+    border-radius: 5px;
 }
 
 .fileInputThingy {
-  width: 98%;
-  height: 6vhpx;
-  border-radius: 3px;
-  border: 1px slateblue solid;
-  transition: 0.3s;
-  overflow: auto;
-  /* background-color: rgb(213, 172, 255); */
-  /* background-color: slateblue; */
-  margin: 1%;
-  background-color: white;
-  color: black;
-  padding: 0;
+    width: 98%;
+    height: 6vhpx;
+    border-radius: 3px;
+    border: 1px slateblue solid;
+    transition: 0.3s;
+    overflow: auto;
+    /* background-color: rgb(213, 172, 255); */
+    /* background-color: slateblue; */
+    margin: 1%;
+    background-color: white;
+    color: black;
+    padding: 0;
 }
 #fileInputThingy {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
 }
 input[type="file"]::file-selector-button {
-  width: 50%;
-  height: 33px;
-  border-radius: 0;
-  border: 1px slateblue solid;
-  transition: 0.3s;
-  overflow: auto;
-  /* background-color: rgb(213, 172, 255); */
-  background-color: slateblue;
-  margin: 1%;
-  color: white;
+    width: 50%;
+    height: 33px;
+    border-radius: 0;
+    border: 1px slateblue solid;
+    transition: 0.3s;
+    overflow: auto;
+    /* background-color: rgb(213, 172, 255); */
+    background-color: slateblue;
+    margin: 1%;
+    color: white;
 }
 input[type="file"]::file-selector-button:hover {
-  background-color: darkslateblue;
+    background-color: darkslateblue;
 }
 
 .ruleDiv {
-  font-size: x-large;
-  width: 100%;
-  /* height: 50vh; */
-  /* background-color: rgb(222, 194, 255); */
-  /* background-color: whitesmoke; */
-  resize: none;
-  box-sizing: border-box;
-  display: block;
-  padding-left: 3%;
-  padding-right: 3%;
-  padding-bottom: 0%;
-  padding-top: 0%;
+    font-size: x-large;
+    width: 100%;
+    /* height: 50vh; */
+    /* background-color: rgb(222, 194, 255); */
+    /* background-color: whitesmoke; */
+    resize: none;
+    box-sizing: border-box;
+    display: block;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 0%;
+    padding-top: 0%;
 }
 .ruleTypeDiv {
-  /* background-color: red; */
-  padding: 3%;
-  padding-bottom: 3%;
-  border-left: 1px slateblue;
-  border-right: 1px slateblue;
-  border-top: 0;
-  border-bottom: 0;
-  border-style: dashed;
+    /* background-color: red; */
+    padding: 3%;
+    padding-bottom: 3%;
+    border-left: 1px slateblue;
+    border-right: 1px slateblue;
+    border-top: 0;
+    border-bottom: 0;
+    border-style: dashed;
 }
 .subBtn {
-  /* background-color: slateblue; */
-  /* background-color: rgb(200, 170, 233); */
-  background-color: rgb(162, 139, 187);
-  height: auto;
-  /* display: inline-block; */
-  /* text-align: start; */
+    /* background-color: slateblue; */
+    /* background-color: rgb(200, 170, 233); */
+    background-color: rgb(162, 139, 187);
+    height: auto;
+    /* display: inline-block; */
+    /* text-align: start; */
 }
 .singleRuleDiv {
-  padding-bottom: 3%;
-  margin-top: 1%;
-  display: flex;
-  /* border: solid 1px rgb(222, 194, 255); */
-  /* border: solid 1px slateblue; */
-  /* border-radius: 3px; */
-  border-collapse: separate;
-  /* background-color: white; */
-  /* border-bottom: none; */
+    padding-bottom: 3%;
+    margin-top: 1%;
+    display: flex;
+    /* border: solid 1px rgb(222, 194, 255); */
+    /* border: solid 1px slateblue; */
+    /* border-radius: 3px; */
+    border-collapse: separate;
+    /* background-color: white; */
+    /* border-bottom: none; */
 }
 .firstRowRulesWrap {
-  /* border: solid 1px darkslateblue; */
-  border-radius: 2px;
-  align-items: center;
-  margin-bottom: 2%;
-  padding-top: 0;
-  margin-top: 0;
+    /* border: solid 1px darkslateblue; */
+    border-radius: 2px;
+    align-items: center;
+    margin-bottom: 2%;
+    padding-top: 0;
+    margin-top: 0;
 }
 .firstRowRule {
-  padding-bottom: 2%;
-  border-bottom: 1px slateblue;
-  border-top: 0;
-  border-right: 0;
-  border-left: 0;
-  border-style: dashed;
-  border-collapse: collapse;
+    padding-bottom: 2%;
+    border-bottom: 1px slateblue;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    border-style: dashed;
+    border-collapse: collapse;
 }
 .ruleSelect {
-  width: 40%;
-  border: solid 1px darkslateblue;
-  border-radius: 2px;
-  transition: 0.3s;
+    width: 40%;
+    border: solid 1px darkslateblue;
+    border-radius: 2px;
+    transition: 0.3s;
 }
 .ruleSelect:hover {
-  background-color: lightgray;
+    background-color: lightgray;
 }
 .ruleWrap {
-  width: 100%;
-  vertical-align: top;
-  justify-content: center;
+    width: 100%;
+    vertical-align: top;
+    justify-content: center;
 }
 .deleteRule {
-  color: white;
-  background-color: red;
-  /* position: relative; */
-  margin-right: 2%;
-  border-radius: 3px;
-  border: 1px black;
-  transition: 0.3s;
-  height: 100%;
+    color: white;
+    background-color: red;
+    /* position: relative; */
+    margin-right: 2%;
+    border-radius: 3px;
+    border: 1px black;
+    transition: 0.3s;
+    height: 100%;
 }
 .deleteRule:hover {
-  background-color: darkred;
+    background-color: darkred;
 }
 .credits {
-  color: gray;
-  text-align: left;
-  font-size: small;
-  white-space: pre-line;
+    color: gray;
+    text-align: left;
+    font-size: small;
+    white-space: pre-line;
 }
 .creditsWrap {
-  text-align: left;
-  border: 2px solid darkslateblue;
-  border-bottom-right-radius: 3px;
-  border-top: none;
-  border-left: none;
-  width: fit-content;
-  /* position: absolute;
+    text-align: left;
+    border: 2px solid darkslateblue;
+    border-bottom-right-radius: 3px;
+    border-top: none;
+    border-left: none;
+    width: fit-content;
+    /* position: absolute;
   bottom: 0;
   left: 0; */
-  display: block;
-  margin: 0px;
-  margin-bottom: 10px;
-  padding-top: 0px;
-  padding-right: 10px;
-  padding-left: 5px;
-  padding-bottom: 5px;
+    display: block;
+    margin: 0px;
+    margin-bottom: 10px;
+    padding-top: 0px;
+    padding-right: 10px;
+    padding-left: 5px;
+    padding-bottom: 5px;
 }
 .creditsA {
-  color: darkslateblue;
-  text-decoration: none;
-  transition: 0.3s;
-  font-weight: 600;
+    color: darkslateblue;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 600;
 }
 .creditsA:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 /* .openTransition-enter-active {
   transition: height 0.5s ease-out;
@@ -503,18 +506,18 @@ input[type="file"]::file-selector-button:hover {
 } */
 
 .openTransition-enter-active {
-  max-height: 100vh;
-  transition: max-height 1s ease-out;
+    max-height: 100vh;
+    transition: max-height 1s ease-out;
 }
 
 .openTransition-leave-active {
-  transition: max-height 1s ease-out;
-  overflow: hidden;
+    transition: max-height 1s ease-out;
+    overflow: hidden;
 }
 
 .openTransition-enter-from,
 .openTransition-leave-to {
-  max-height: 0;
-  display: none; /* remove this line to activate non working animation */
-  overflow: hidden;
+    max-height: 0;
+    display: none; /* remove this line to activate non working animation */
+    overflow: hidden;
 }
