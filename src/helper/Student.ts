@@ -21,9 +21,7 @@ export class Student
 
     
     public validate(final = true) {
-        // TODO: detecting rows 
-        if (!this.seat.marked)
-        {
+        if (this.notBackOfTheRoom && this.seat.backrow) {
             return false;
         }
         for (let j = 0; j < this.avoid.length; j++) {
