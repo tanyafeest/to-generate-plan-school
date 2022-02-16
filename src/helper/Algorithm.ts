@@ -173,7 +173,7 @@ function orderbyNeighbours(sitzplaetze: Sitzplatz[], calculateRows = false, rand
      * how random the order will be: 
      * 0 (or other values under 1) will always return the same order,
      * 1 (or higher) will  shuffle seats with the same neighbour count and
-     * 2 (or higher) will return seats in a completely random order.
+     * 2 (or higher) will return seats in a completely random order. Warning: this removes some of the optimisation.
      * @param {boolean} alwaysCalculateNeighbours
      * with a randomness of 2 or higher */ 
     let maxX = 0;
