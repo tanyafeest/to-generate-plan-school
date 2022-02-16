@@ -91,6 +91,7 @@ export default function compute(sitzplaetze: Sitzplatz[], students: Student[], r
 
 function recSolveTwice(unsolved: Student[], seats: Sitzplatz[], nextUnsolved: Student[], nextSeats: Sitzplatz[]) {
     console.log("unsolved.length = " + unsolved.length + ", seats.length = " + seats.length)
+    console.log("längen der nächsten: ", nextUnsolved.length, seats.concat(nextSeats).length)
     if (unsolved.length == 0 && recSolve(nextUnsolved, seats.concat(nextSeats))) {
         console.log("no unsolved Students");
         return true;
@@ -106,7 +107,7 @@ function recSolveTwice(unsolved: Student[], seats: Sitzplatz[], nextUnsolved: St
         student.setSeat(seat);
         if (student.validate(false)) {
             const temp = seats.splice(i, 1);
-            if (recSolve(unsolved, seats)) {
+            if (recSolveTwice(unsolved, seats, nextUnsolved, nextSeats)) {
                 console.log("found seat for " + student.name + ": (" + temp[0].x + "|" + temp[0].y + ")");
                 return true;
             }
@@ -295,7 +296,7 @@ function maxLimit(input: number, limit: number) {
     }
 }
 
-function matchLists(l1: Object[], l2: Object[]) {
+function matchLists(l1: unknown[], l2: unknown[]) {
     //takes two lists and returns true if any element of the first is also in the second.
     l1.forEach(i => {
         if (l2.includes(i)) {
@@ -305,7 +306,7 @@ function matchLists(l1: Object[], l2: Object[]) {
     return false;
 }
 
-function shuffleArray(array: Object[]) {
+function shuffleArray(array: unknown[]) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
