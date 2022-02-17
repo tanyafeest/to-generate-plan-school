@@ -3,7 +3,8 @@ import { Sitzplatz } from "@/helper/Sitzplatz";
 import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
 import compute from "./helper/Algorithm";
-import compute2 from "./helper/Algo";
+import {Algo} from "./helper/Algo";
+import {Algo2} from "./helper/Algo2";
 
 /*  
   + TODO: blaue knöpfe
@@ -257,7 +258,8 @@ export default defineComponent({
       console.log("cmpPLan");
       this.deleteUncompleteRules();
       compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
-      // compute2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
+      // new Algo(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
+      // new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
     },
     findStudentInArrayByName(name: string, arr: Student[]) {
       for (const element of arr) {
@@ -283,9 +285,19 @@ export default defineComponent({
             return;
           }
         });
+        
+        // check for double student name
+        studentList.forEach(s => {
+          while (s.name == student)
+          {
+            student += "1";
+          }
+        });
+
         const s = new Student(student, [], []);
         s.frontRow = firstRow;
         s.notBackOfTheRoom = notBackRow;
+
         studentList.push(s);
       });
 
