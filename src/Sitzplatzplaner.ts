@@ -11,7 +11,7 @@ import {Algo2} from "./helper/Algo2";
   + vorlagenknopf
 ? möglichst nach vorne fixen
   + nicht nach hinten
-manuell zuweisen
+  + manuell zuweisen
 
 */
 

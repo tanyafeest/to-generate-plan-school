@@ -59,7 +59,7 @@
             "
           > -->
             <button class="btn subBtn" @click="avoidRulesVisible = !avoidRulesVisible">
-              Dürfen nicht nebeneinander&nbsp;&nbsp;
+              Dürfen <strong>nicht</strong> nebeneinander&nbsp;&nbsp;
               <i v-if="!avoidRulesVisible" class="arrowdown" />
               <i v-if="avoidRulesVisible" class="arrowup" />
             </button>
@@ -150,7 +150,7 @@
             <!-- notBackRow rules start -->
 
             <button class="btn subBtn" @click="notBackRulesVisible = !notBackRulesVisible">
-              Nicht nach hinten&nbsp;&nbsp;
+              <strong> Nicht </strong> nach hinten&nbsp;&nbsp;
               <i v-if="!notBackRulesVisible" class="arrowdown" />
               <i v-if="notBackRulesVisible" class="arrowup" />
             </button>
