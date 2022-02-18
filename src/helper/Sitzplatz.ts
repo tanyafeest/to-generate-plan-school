@@ -5,6 +5,7 @@ export class Sitzplatz
     x: number;
     y: number;
     marked: boolean;
+    manuallySelected = false;
     name: string;
     neighbours = -1;
     frontRow = false;

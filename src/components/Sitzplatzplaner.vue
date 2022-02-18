@@ -32,7 +32,7 @@
         </button>
         <transition name="openTransition">
           <div v-if="studentFieldVisible" class="studentFieldDiv">
-            <textarea v-if="studentFieldVisible" class="studentField" v-model="studentFieldValue" placeholder="Name 1"> </textarea>
+            <textarea v-if="studentFieldVisible" class="studentField" v-model="studentFieldValue" placeholder="Name 1" @blur="checkForDoubleNames"> </textarea>
             <input type="file" accept="text/csv,application/csv" id="fileInputThingy" @change="loadStudentFile($event)" />
             <button class="fileInputThingy">
               <label for="fileInputThingy" style="width: 100%; height: 100%; display: block; cursor: pointer"><span style="line-height: 31px"> Datei auswählen </span></label>
@@ -181,6 +181,21 @@
         </transition>
       </div>
 
+      <div class="algorithmFieldWrap">
+        <button class="btn" @click="algorithmSettingsVisible = closeEverythingExcept(algorithmSettingsVisible)">
+          Algorithmusregeln&nbsp;&nbsp;
+          <i v-if="!algorithmSettingsVisible" class="arrowdown" />
+          <i v-if="algorithmSettingsVisible" class="arrowup" />
+        </button>
+        <transition name="openTransition">
+          <div v-if="algorithmSettingsVisible" class="algorithmSettingsDiv">
+            Stufe der Zufälligkeit:<br/> 
+            <input type="range" min="0" max="2" v-model="algorithmRandomness"/>
+            {{ algorithmRandomness }}
+          </div>
+        </transition>
+      </div>
+
       <button name="compute" @click="computePlan" class="btn submit">Plan erstellen</button>
       <button name="compute" @click="resetNamesOnPlan()" class="btn submit">Namen zurücksetzen</button>
       <span class="credits creditsWrap"
@@ -204,13 +219,13 @@
           id="fieldSelectionID"
           class="fieldBtnContextSelect"
           @change="
-            changeFieldBtnText($event.target.value);
+            manuallySelectStudent($event.target.value);
             fieldBtnContextMenuOpen = false
           "
           @blur="fieldBtnContextMenuOpen = false"
         >
           <option value="0" selected hidden>Schüler auswählen</option>
-          <option>  </option>
+          <option> </option>
           <option v-for="o in getNames()" :key="o">{{ o }}</option>
         </select>
       <!-- <button class="closeContextSelect" @click="fieldBtnContextMenuOpen = false">X</button> -->
@@ -239,7 +254,7 @@
               @touchend="touchend($event, x,y)"
               :style="{
                 'font-size': 'medium',
-                'background-color': isMarked(x, y) ? 'lightblue' : 'white',
+                'background-color': isMarked(x, y) ? (isManuallySelected(x,y) ? 'skyblue' : 'lightblue') : 'white',
                 border: isMarked(x, y) ? 'black 2px solid' : 'none',
               }"
               v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"

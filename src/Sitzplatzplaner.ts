@@ -5,6 +5,7 @@ import { Student } from "./helper/Student";
 import compute from "./helper/Algorithm";
 import {Algo} from "./helper/Algo";
 import {Algo2} from "./helper/Algo2";
+import { stringifyStyle } from "@vue/shared";
 
 /*  
   + TODO: blaue knöpfe
@@ -28,8 +29,10 @@ export default defineComponent({
       gridWidth: 5,
       gridHeight: 5,
       sideWidth: 25,
+      algorithmRandomness: 1,
       studentFieldVisible: true,
       ruleVisible: false,
+      algorithmSettingsVisible: false,
       avoidRulesVisible: true,
       nearbyRulesVisible: true,
       firstRowRulesVisible: true,
@@ -113,6 +116,7 @@ export default defineComponent({
       if (!platz.marked && platz.name != "")
       {
         platz.name = ""
+        platz.manuallySelected = false;
       }
     },
     onFieldClickWhenMouseIsDown(x: number, y: number) {
@@ -167,21 +171,24 @@ export default defineComponent({
         document.getElementById('fieldSelectionID')?.focus()
       });
     },
-    changeFieldBtnText(e : any)
+    manuallySelectStudent(e : any)
     {
-      if (e != "")
+      if (e.trim() != "")
       {
+        console.log(e)
         for (const key in this.sitzplaetze)
         {
           const field = this.sitzplaetze[key];
           if (field.name == e)
           {
             field.name = "";
+            field.manuallySelected = false;
           }
         }
+        this.sitzplaetze[this.contextMenuOpenedBy].name = e;
+        this.sitzplaetze[this.contextMenuOpenedBy].marked = true;
+        this.sitzplaetze[this.contextMenuOpenedBy].manuallySelected = true;
       }
-      this.sitzplaetze[this.contextMenuOpenedBy].name = e;
-      this.sitzplaetze[this.contextMenuOpenedBy].marked = true;
     },
     setPreset(i: number) {
       this.presetPageOpen = false;
@@ -239,6 +246,7 @@ export default defineComponent({
     closeEverythingExcept(except: boolean) {
       this.ruleVisible = false;
       this.studentFieldVisible = false;
+      this.algorithmSettingsVisible = false;
       // this.nearbyRulesVisible = false;
       // this.avoidRulesVisible = false;
       return !except;
@@ -257,7 +265,8 @@ export default defineComponent({
     computePlan() {
       console.log("cmpPLan");
       this.deleteUncompleteRules();
-      compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules());
+      this.resetNamesOnPlan(true);
+      compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules(), this.algorithmRandomness);
       // new Algo(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
       // new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
     },
@@ -287,12 +296,12 @@ export default defineComponent({
         });
         
         // check for double student name
-        studentList.forEach(s => {
-          while (s.name == student)
-          {
-            student += "1";
-          }
-        });
+        // studentList.forEach(s => {
+        //   while (s.name == student)
+        //   {
+        //     student += "1";
+        //   }
+        // });
 
         const s = new Student(student, [], []);
         s.frontRow = firstRow;
@@ -362,11 +371,14 @@ export default defineComponent({
         }
       }
     },
-    resetNamesOnPlan() {
+    resetNamesOnPlan(excludeManuallySelected=false) {
       for (let x = 0; x < this.maxGridWidth; x++) {
         for (let y = 0; y < this.maxGridHeight; y++) {
           const field: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
-          field.name = "";
+          if (!(excludeManuallySelected && field.manuallySelected)){
+            field.name = "";
+            field.manuallySelected = false;
+          }
         }
       }
     },
@@ -375,6 +387,12 @@ export default defineComponent({
         return false;
       }
       return this.sitzplaetze[x.toString() + "," + y.toString()].marked;
+    },
+    isManuallySelected(x: number, y: number) {
+      if (!Object.keys(this.sitzplaetze).includes(x.toString() + "," + y.toString())) {
+        return false;
+      }
+      return this.sitzplaetze[x.toString() + "," + y.toString()].manuallySelected;
     },
     // instantiateList(maxGridWidth: number, maxGridHeight: number) {
     //   const fields: Sitzplatz[] = [];
@@ -406,6 +424,33 @@ export default defineComponent({
         }
       }
       return fields;
+    },
+    checkForDoubleNames()
+    {
+      const names = this.getNames();
+      const newNames = [] as string[];
+      names.forEach(name => {
+        while (newNames.includes(name))
+        {
+          if (name.includes("_"))
+          {
+            const temp = name.split("_");
+            if (!isNaN(+temp[temp.length - 1])){
+              temp[temp.length - 1] = (Number(temp[temp.length - 1]) + 1).toString();
+              name = temp.join("_");
+            }else
+          {
+            name += "_1";
+          }
+          } else
+          {
+            name += "_1";
+          }
+        }
+        newNames.push(name);
+      });
+
+      this.studentFieldValue = newNames.join("\n")
     },
     getNames() {
       return this.studentFieldValue.split("\n").filter((x) => x !== null && x !== "");

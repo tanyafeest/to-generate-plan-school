@@ -456,6 +456,17 @@ input[type="file"]::file-selector-button:hover {
 .deleteRule:hover {
     background-color: darkred;
 }
+.algorithmSettingsDiv {
+    margin-left: 3%;
+    margin-right: 3%;
+    padding: 3%;
+    padding-bottom: 3%;
+    border-left: 1px slateblue;
+    border-right: 1px slateblue;
+    border-top: 0;
+    border-bottom: 0;
+    border-style: dashed;
+}
 .credits {
     color: gray;
     text-align: left;
