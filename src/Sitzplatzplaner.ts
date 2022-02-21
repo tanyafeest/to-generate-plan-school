@@ -135,12 +135,9 @@ export default defineComponent({
     },
     touchend(e: Event, x: number, y: number)
     {
-      if (Date.now() - this.lastTouch > 200)
+      if (Date.now() - this.lastTouch > 200 && !this.fieldBtnContextMenuOpen)
       {
-        console.log("yay")
         this.onFieldContextMenu(e,x,y)
-        // this.fieldBtnContextMenuOpen = true;
-        // this.contextMenuOpenedBy = x.toString() + "," + y.toString();
       }
       this.lastTouch = Date.now();
     },
