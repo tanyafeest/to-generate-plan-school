@@ -7,6 +7,9 @@
       </button>
     </div>
   </div>
+  <div class="presetDiv" v-if="loadingDivOpen" >
+    <div class="lds-default" ><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
   <div @mousedown.left="isMouseDown = true" @mouseup.left="isMouseDown = false" id="wrapperDiv">
     <div class="sideDiv">
       <!-- <img alt="Vue logo" src="@/assets/GMO_Schullogo.png" style="width:33%; margin-top:3%"> -->

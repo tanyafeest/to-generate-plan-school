@@ -2,11 +2,8 @@ import { Sitzplatz } from "./Sitzplatz";
 import { Student } from "./Student";
 import { StudentRule } from "./StudentRule";
 import { Rule } from "./Rule";
-export class Algo2
-{
-    
+export class Algo2 {
     // TODO: ~ L 37: benötigte Reihenanzahl anhand des y-wertes bestimmen
-    //      check neighbour student rules for sitWith when sitting down in valSingleStudent
     firstRow: number;
     lastRow: number;
     seats: Sitzplatz[];
@@ -35,7 +32,7 @@ export class Algo2
         });
 
         // number of front seats needed
-        students.forEach(s => {
+        students.forEach((s) => {
             if (s.frontRow) this.numberOfFrontSeatsNeeded++;
         });
 
@@ -90,7 +87,7 @@ export class Algo2
                     if (seat.name == "") {
                         s += empty;
                     } else {
-                        s += seat.name.slice(0,7).padEnd(7, " ") + "|";
+                        s += seat.name.slice(0, 7).padEnd(7, " ") + "|";
                     }
                 } else s += empty2;
             }
@@ -146,9 +143,32 @@ export class Algo2
         return result;
     }
 
+    getFreeSeatNeighbourCount(x: number, y: number) {
+        let freeNeighbourSeats = 0;
+        this.getRoomNeighbours(x, y).forEach((n) => {
+            if (n.name == "") freeNeighbourSeats++;
+        });
+        return freeNeighbourSeats;
+    }
+
+    shuffleArray(array: any[]) {
+        let currentIndex = array.length,
+            randomIndex;
+
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    }
+
     //#endregion helper functions
 
-    compute() {
+    compute()
+    {
         if (this.seats.length == 0) {
             alert("Es sind keine Sitzplätze ausgewählt.");
             return;
@@ -157,48 +177,120 @@ export class Algo2
             alert("Es gibt weniger Plätze als Schüler");
             return;
         }
-        const studentOrder = [] as Student[];
-        this.students.forEach(s => {
-            if (s.frontRow) studentOrder.push(s);
-        });
-        this.students.forEach(s =>
+        
+        // const studentOrder = [] as Student[];
+        // this.students.forEach(s => {
+        //     if (s.frontRow) studentOrder.push(s);
+        // });
+        // this.students.forEach(s =>
+        // {
+        //     if (!studentOrder.includes(s)) studentOrder.push(s);
+        // });
+
+        // const studentOrder = this.students.slice();
+        // studentOrder.sort((a, b) =>
+        // {
+        //     if (a.frontRow && b.frontRow) return 0;
+        //     else if (a.frontRow) return -1;
+        //     else if (b.frontRow) return 1;
+        //     if(b.sitWith.length - a.sitWith.length == 0) return (Math.floor(Math.random() * 10) % 2 == 0) ? -1 : 1;
+        //     return b.sitWith.length - a.sitWith.length;
+        // });
+        let freeStudents = this.students.slice();
+        const frontRowStudents = [] as Student[];
+        const notLastRowStudents = [] as Student[];
+        const hasFixedNeighbours = [] as Student[];
+        // remove manually seated students
+        for (let i = freeStudents.length - 1; i >= 0; i--) {
+            if (freeStudents[i].seated) {
+                freeStudents.splice(i, 1);
+            }
+        }
+        // add front row students to their own list
+        for (let i = freeStudents.length - 1; i >= 0; i--) {
+            if (freeStudents[i].frontRow) {
+                frontRowStudents.push(freeStudents[i]);
+                freeStudents.splice(i, 1);
+            }
+        }
+        // add students that should not sit in the back to their own list
+        for (let i = freeStudents.length - 1; i >= 0; i--) {
+            if (freeStudents[i].notBackOfTheRoom) {
+                notLastRowStudents.push(freeStudents[i]);
+                freeStudents.splice(i, 1);
+            }
+        }
+        // this.shuffleArray(firstRow);
+        for (let i = freeStudents.length - 1; i >= 0; i--) {
+            if (freeStudents[i].sitWith.length > 0) {
+                hasFixedNeighbours.push(freeStudents[i]);
+                freeStudents.splice(i, 1);
+            }
+        }
+        hasFixedNeighbours.sort((a, b) => b.sitWith.length - a.sitWith.length);
+        this.shuffleArray(freeStudents);
+        this.shuffleArray(notLastRowStudents);
+        // put students that must not sit in the last row at the beginning of the freeStudenst array
+        freeStudents = notLastRowStudents.concat(freeStudents);
+
+
+        // merge all arrays
+        const studentOrder = frontRowStudents.concat(hasFixedNeighbours.concat(freeStudents));
+
+        // shuffle students sitting in the first row
+        if (frontRowStudents.length > 0)
         {
-            if (!studentOrder.includes(s)) studentOrder.push(s); 
-        });
+            let frontRowCount = 0;
+            this.seats.forEach((s) =>
+            {
+                if (s.y == this.firstRow && s.name == "")
+                {
+                    frontRowCount++;
+                }
+            });
+            const frontRow = this.seats.splice(0, frontRowCount);
+            this.shuffleArray(frontRow)
+            this.seats = frontRow.concat(this.seats);
+            // const frontRow = studentOrder.splice(0, frontRowCount);
+            // this.shuffleArray(frontRow);
+            // studentOrder = frontRow.concat(studentOrder);
+        }
+
+
 
         const freeSeats = [] as Sitzplatz[];
         this.seats.forEach((seat) => {
             if (seat.name == "") freeSeats.push(seat);
         });
         console.clear();
+        console.log("Joshua, das ist Florians Algorithmus")
+        console.log("Geh in Sitzplatzplaner.ts Z.274")
         const result = this.recSolve(studentOrder, freeSeats); //slice to copy
-        if (!result) alert("Dieser Plan ist mit den gegebenen Präferenzen nicht möglich.")
+        if (!result) alert("Dieser Plan ist mit den gegebenen Präferenzen nicht möglich.");
     }
 
-
-    recSolve(students: Student[], freeSeats: Sitzplatz[], lastStudent?: Student) {
+    recSolve(students: Student[], freeSeats: Sitzplatz[], lastStudent?: Student, debug = false) {
         if (students.length == 0) {
             return this.validateFinal(this.students);
         }
-        
+
         if (lastStudent) {
             if (!this.validateSingleStudent(lastStudent)) {
                 return false;
             }
             // check validation for adjacent seats
             for (const seat of this.getRoomNeighbours(lastStudent.getSeat().x, lastStudent.getSeat().y)) {
-                
-                if (seat.name != "")
-                {
+                if (seat.name != "") {
                     if (!this.validateSingleStudent(this.findStudentByName(seat.name))) return false;
                 }
             }
-
+        } else {
+            if (!this.validateIncomplete(this.students)) return false;
         }
-        this.printRoom();
 
-        for (const s of students)
-        {
+        if (debug) this.printRoom();
+
+        for (const s of students) {
             if (s.seated) {
                 students.splice(students.indexOf(s), 1);
                 continue;
@@ -222,11 +314,13 @@ export class Algo2
                     students.splice(index, 0, s);
                 }
             }
+            console.log("nani1 " + s.name);
             return false;
         }
         if (students.length == 0) {
             return this.validateFinal(this.students);
         }
+        console.log("nani3 " + students.length);
         return false;
     }
 
@@ -235,11 +329,13 @@ export class Algo2
     validateSingleStudent(s: Student, final = false) {
         if (s.frontRow) {
             if (s.getSeat().y != this.firstRow) {
+                console.log("uwu???1");
                 return false;
             }
         }
         if (s.notBackOfTheRoom) {
             if (s.getSeat().y == this.lastRow) {
+                console.log("uwu???2");
                 return false;
             }
         }
@@ -263,24 +359,23 @@ export class Algo2
         // }
         let freeNeighbourSeatsNeeded = s.sitWith.length;
         for (const sNearby of s.sitWith) {
-            if (sNearby.seated)
-            {
+            if (sNearby.seated) {
                 freeNeighbourSeatsNeeded--;
                 if (!this.isClose(sNearby.getSeat().x, sNearby.getSeat().y, s.getSeat().x, s.getSeat().y)) {
+                    console.log("uwu???3");
                     return false;
                 }
             }
         }
-        let freeNeighbourSeats = 0;
-        this.getRoomNeighbours(s.getSeat().x, s.getSeat().y).forEach(n => {
-            if (n.name == "") freeNeighbourSeats++;
-        });
-        if (freeNeighbourSeats < freeNeighbourSeatsNeeded) return false;
 
+        const freeNeighbourSeats = this.getFreeSeatNeighbourCount(s.getSeat().x, s.getSeat().y);
+
+        if (freeNeighbourSeats < freeNeighbourSeatsNeeded) return false;
 
         for (const sAvoid of s.avoid) {
             if (sAvoid.seated) {
                 if (this.isClose(sAvoid.getSeat().x, sAvoid.getSeat().y, s.getSeat().x, s.getSeat().y)) {
+                    console.log("uwu???4");
                     return false;
                 }
             }
@@ -294,13 +389,13 @@ export class Algo2
 
             if (s.frontRow) {
                 if (s.getSeat().y != this.firstRow) {
-                    // console.log("uwu1");
+                    console.log("uwu1");
                     return false;
                 }
             }
             if (s.notBackOfTheRoom) {
                 if (s.getSeat().y == this.lastRow) {
-                    // console.log("uwu2");
+                    console.log("uwu2");
                     return false;
                 }
             }
@@ -316,7 +411,7 @@ export class Algo2
             for (const sNearby of s.sitWith) {
                 if (sNearby.seated || allSitWithNeedToBeSeated) {
                     if (!this.isClose(sNearby.getSeat().x, sNearby.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                        // console.log("uwu3");
+                        console.log("uwu3");
                         return false;
                     }
                 }
@@ -325,7 +420,7 @@ export class Algo2
             for (const sAvoid of s.avoid) {
                 if (sAvoid.seated) {
                     if (this.isClose(sAvoid.getSeat().x, sAvoid.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                        // console.log("uwu4");
+                        console.log("uwu4");
                         return false;
                     }
                 }
@@ -337,34 +432,34 @@ export class Algo2
         for (const s of students) {
             if (!s.seated) {
                 // console.log(s.name);
-                // console.log("uwu5");
+                console.log("uwu5");
                 return false;
             }
 
             for (const sNearby of s.sitWith) {
                 if (!this.isClose(sNearby.getSeat().x, sNearby.getSeat().y, s.getSeat().x, s.getSeat().y)) {
                     // console.log(s.name + "," + sNearby.name);
-                    // console.log("uwu6");
+                    console.log("uwu6");
                     return false;
                 }
             }
 
             for (const sAvoid of s.avoid) {
                 if (this.isClose(sAvoid.getSeat().x, sAvoid.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                    // console.log("uwu7");
+                    console.log("uwu7");
                     return false;
                 }
             }
 
             if (s.frontRow) {
                 if (s.getSeat().y != this.firstRow) {
-                    // console.log("uwu8");
+                    console.log("uwu8");
                     return false;
                 }
             }
             if (s.notBackOfTheRoom) {
                 if (s.getSeat().y == this.lastRow) {
-                    // console.log("uwu9");
+                    console.log("uwu9");
                     return false;
                 }
             }

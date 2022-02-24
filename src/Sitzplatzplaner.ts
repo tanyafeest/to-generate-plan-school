@@ -4,9 +4,7 @@ import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
 import compute from "./helper/Algorithm";
 import {Algo} from "./helper/Algo";
-import {Algo2} from "./helper/Algo2";
-import { stringifyStyle } from "@vue/shared";
-
+import { Algo2 } from "./helper/Algo2";
 /*  
   + TODO: blaue knöpfe
   + vorlagenknopf
@@ -50,6 +48,7 @@ export default defineComponent({
       contextMenuLeft: "0px",
       contextMenuOpenedBy: "",
       lastTouch: 0,
+      loadingDivOpen: false,
       // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
@@ -172,7 +171,6 @@ export default defineComponent({
     {
       if (e.trim() != "")
       {
-        console.log(e)
         for (const key in this.sitzplaetze)
         {
           const field = this.sitzplaetze[key];
@@ -263,9 +261,34 @@ export default defineComponent({
       console.log("cmpPLan");
       this.deleteUncompleteRules();
       this.resetNamesOnPlan(true);
-      compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules(), this.algorithmRandomness);
       // new Algo(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
-      // new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
+      if (!this.checkForImpossibleRules())
+      {
+        alert("Es überlappen sich Regeln, sodass Schüler sowohl nebeneinander als auch nicht nebeneinander sitzen sollen.")
+        return;
+      }
+      this.loadingDivOpen = true;
+      
+      // this.$forceUpdate();
+      this.$nextTick(() => {
+        // compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules(), this.algorithmRandomness);
+        new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
+      });
+      this.loadingDivOpen = false;
+    },
+    checkForImpossibleRules()
+    {
+      for (const rule of this.avoidRules)
+      {
+        for (const rule2 of this.nearbyRules)
+        {
+          if ((rule.student1 == rule2.student1 && rule.student2 == rule2.student2) || (rule.student1 == rule2.student2 && rule.student2 == rule2.student1))
+          {
+            return false;
+          }
+        }
+      }
+      return true;
     },
     findStudentInArrayByName(name: string, arr: Student[]) {
       for (const element of arr) {
@@ -449,8 +472,13 @@ export default defineComponent({
 
       this.studentFieldValue = newNames.join("\n")
     },
-    getNames() {
-      return this.studentFieldValue.split("\n").filter((x) => x !== null && x !== "");
+    getNames()
+    {
+      const names = this.studentFieldValue.split("\n").filter((x) => x !== null && x !== "");
+      for (let i = 0; i < names.length; i++) {
+        names[i] = names[i].trim();        
+      }
+      return names;
     },
     getNumberOfFields() {
       return this.getUsedFieldsToComputePlan().length;
