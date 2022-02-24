@@ -186,21 +186,28 @@
 
       <div class="algorithmFieldWrap">
         <button class="btn" @click="algorithmSettingsVisible = closeEverythingExcept(algorithmSettingsVisible)">
-          Algorithmusregeln&nbsp;&nbsp;
+          Einstellungen&nbsp;&nbsp;
           <i v-if="!algorithmSettingsVisible" class="arrowdown" />
           <i v-if="algorithmSettingsVisible" class="arrowup" />
         </button>
         <transition name="openTransition">
           <div v-if="algorithmSettingsVisible" class="algorithmSettingsDiv">
-            Stufe der Zufälligkeit:<br/> 
-            <input type="range" min="0" max="2" v-model="algorithmRandomness"/>
-            {{ algorithmRandomness }}
+            <p style="display:inline-block; padding-right: 10px;">
+              <span style="vertical-align: middle;padding-right:10px">Stufe der Zufälligkeit:</span>
+              <input style="vertical-align: middle;" type="range" min="0" max="2" v-model="algorithmRandomness"/>
+              <span style="vertical-align: middle;">{{ algorithmRandomness }}</span>
+            </p>
+            <p style="display:inline-block; padding-right: 10px;">
+              <input type="checkbox" style="height:20px;width:20px;vertical-align: middle;" v-model="highlightManuallySelected"/>
+               <span style="vertical-align: middle;">Manuell ausgewählte Schüler hervorheben</span>
+            </p>
           </div>
         </transition>
       </div>
 
-      <button name="compute" @click="computePlan" class="btn submit">Plan erstellen</button>
-      <button name="compute" @click="resetNamesOnPlan()" class="btn submit">Namen zurücksetzen</button>
+      <button @click="computePlan" class="btn submit">Plan erstellen</button>
+      <button @click="resetNamesOnPlan" class="btn submit">Namen zurücksetzen</button>
+      <button @click="downloadPlan" class="btn submit">Bild herunterladen</button>
       <span class="credits creditsWrap"
         >{{ "\n" }}Entwickelt von: {{ "\n" }}
         <a class="credits creditsA" href="https://github.com/Florik3ks" target="_blank">Florian E.</a>
@@ -213,6 +220,7 @@
       </span>
     </div>
 
+    <div id="sitzplan">
     <div class="tafelDivOuter">
       <div class="tafelDivInner">TAFEL</div>
     </div>
@@ -257,7 +265,7 @@
               @touchend="touchend($event, x,y)"
               :style="{
                 'font-size': 'medium',
-                'background-color': isMarked(x, y) ? (isManuallySelected(x,y) ? 'skyblue' : 'lightblue') : 'white',
+                'background-color': isMarked(x, y) ? (isManuallySelected(x,y) ? highlightManuallySelected ? 'skyblue' : 'lightblue' : 'lightblue') : 'white',
                 border: isMarked(x, y) ? 'black 2px solid' : 'none',
               }"
               v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
@@ -268,6 +276,7 @@
           </td>
         </tr>
       </table>
+    </div>
     </div>
   </div>
 </template>

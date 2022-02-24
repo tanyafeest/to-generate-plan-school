@@ -5,6 +5,9 @@ import { Student } from "./helper/Student";
 import compute from "./helper/Algorithm";
 import {Algo} from "./helper/Algo";
 import { Algo2 } from "./helper/Algo2";
+
+import { toBlob, toPng, toJpeg } from 'html-to-image';
+import  download  from 'downloadjs';
 /*  
   + TODO: blaue knöpfe
   + vorlagenknopf
@@ -13,7 +16,6 @@ import { Algo2 } from "./helper/Algo2";
   + manuell zuweisen
 
 */
-
 
 export default defineComponent({
   name: "Sitzplatzplaner",
@@ -49,6 +51,7 @@ export default defineComponent({
       contextMenuOpenedBy: "",
       lastTouch: 0,
       loadingDivOpen: false,
+      highlightManuallySelected: true,
       // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
@@ -108,6 +111,29 @@ export default defineComponent({
     },
   },
   methods: {
+    downloadPlan()
+    {
+      const node = document.getElementById('sitzplan');
+      // if (node)
+      // {
+      //   toBlob(node)
+      //     .then(function (blob)
+      //     {
+      //       if (blob)
+      //       {
+      //         saveAs(blob, 'my-node.png');
+      //       }
+      //     });
+      // }
+
+      if (node)
+      {
+        toPng(node, { pixelRatio: .95 })
+        .then(function (dataUrl) {
+          download(dataUrl, 'Sitzplan-' + new Date(Date.now()).toLocaleDateString() + ".png");
+        });
+      }
+    },
     onFieldClick(x: number, y: number) {
       const platz: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
       platz.marked = !platz.marked;
@@ -180,10 +206,10 @@ export default defineComponent({
             field.manuallySelected = false;
           }
         }
-        this.sitzplaetze[this.contextMenuOpenedBy].name = e;
-        this.sitzplaetze[this.contextMenuOpenedBy].marked = true;
         this.sitzplaetze[this.contextMenuOpenedBy].manuallySelected = true;
-      }
+      }else{this.sitzplaetze[this.contextMenuOpenedBy].manuallySelected = false;}
+      this.sitzplaetze[this.contextMenuOpenedBy].name = e;
+      this.sitzplaetze[this.contextMenuOpenedBy].marked = true;
     },
     setPreset(i: number) {
       this.presetPageOpen = false;
