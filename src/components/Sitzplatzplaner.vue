@@ -12,12 +12,9 @@
   </div>
   <div @mousedown.left="isMouseDown = true" @mouseup.left="isMouseDown = false" id="wrapperDiv">
     <div class="sideDiv">
-      <!-- <img alt="Vue logo" src="@/assets/GMO_Schullogo.png" style="width:33%; margin-top:3%"> -->
       <div class="sliderDiv">
         <div class="sliderInformationDiv">
-          <!-- <p style="margin-top: 5%"> -->
           <span style="line-height: 25px; padding-top: 31px"> {{ gridWidth }} * {{ gridHeight }}<br />{{ getNumberOfFields() }} Sitzplätze</span>
-          <!-- </p> -->
         </div>
         <div class="verticalSliderDiv"><input type="range" name="gridHeight" v-model="gridHeight" min="5" :max="maxGridHeight" class="inpSlider verticalSlider" /></div>
         <input type="range" name="gridWidth" v-model="gridWidth" min="5" :max="maxGridWidth" class="inpSlider horizontalSlider" />
@@ -25,8 +22,7 @@
       <div>
         <button @click="presetPageOpen = true" class="openPresetBtn">Raumvorlagen öffnen</button>
       </div>
-      <!-- <div class="sliderDiv">
-    </div> -->
+
       <div class="studentFieldWrap">
         <button class="btn" @click="studentFieldVisible = closeEverythingExcept(studentFieldVisible)">
           Namen der Schüler&nbsp;&nbsp;
@@ -51,16 +47,8 @@
           <i v-if="ruleVisible" class="arrowup" />
         </button>
         <transition name="openTransition">
-          <!-- <textarea v-if="ruleVisible" class="studentField" v-model="studentFieldValue" placeholder="Name 1&#10;Name 2&#10;..."> </textarea> -->
           <div class="ruleDiv" v-if="ruleVisible">
             <!-- avoidRules start -->
-            <!-- <button
-            class="btn subBtn"
-            @click="
-              avoidRulesVisible = closeEverythingExcept(avoidRulesVisible);
-              ruleVisible = true;
-            "
-          > -->
             <button class="btn subBtn" @click="avoidRulesVisible = !avoidRulesVisible">
               Dürfen <strong>nicht</strong> nebeneinander&nbsp;&nbsp;
               <i v-if="!avoidRulesVisible" class="arrowdown" />
@@ -83,16 +71,8 @@
             </transition>
 
             <!-- nearbyRules start -->
-            <!-- <button
-            class="btn subBtn"
-            @click="
-              nearbyRulesVisible = closeEverythingExcept(nearbyRulesVisible);
-              ruleVisible = true;
-            "
-          > -->
             <button class="btn subBtn" @click="nearbyRulesVisible = !nearbyRulesVisible">
               Sollen nebeneinander&nbsp;&nbsp;
-              <!-- Sollen möglichst nebeneinander&nbsp;&nbsp; -->
               <i v-if="!nearbyRulesVisible" class="arrowdown" />
               <i v-if="nearbyRulesVisible" class="arrowup" />
             </button>
@@ -113,16 +93,8 @@
             </transition>
 
             <!-- first row rules start -->
-            <!-- <button
-            class="btn subBtn"
-            @click="
-              firstRowRulesVisible = closeEverythingExcept(firstRowRulesVisible);
-              ruleVisible = true;
-            "
-          > -->
             <button class="btn subBtn" @click="firstRowRulesVisible = !firstRowRulesVisible">
               Nach vorne&nbsp;&nbsp;
-              <!-- Möglichst nach vorne&nbsp;&nbsp; -->
               <i v-if="!firstRowRulesVisible" class="arrowdown" />
               <i v-if="firstRowRulesVisible" class="arrowup" />
             </button>
@@ -146,7 +118,6 @@
 
                   <option v-for="o in getNames()" :key="o">{{ o }}</option>
                 </select>
-                <!-- <button class="btn ruleBtn" @click="addRule(nearbyRules)">Neue Regel</button> -->
               </div>
             </transition>
 
@@ -177,7 +148,6 @@
 
                   <option v-for="o in getNames()" :key="o">{{ o }}</option>
                 </select>
-                <!-- <button class="btn ruleBtn" @click="addRule(nearbyRules)">Neue Regel</button> -->
               </div>
             </transition>
           </div>
@@ -239,7 +209,6 @@
           <option> </option>
           <option v-for="o in getNames()" :key="o">{{ o }}</option>
         </select>
-      <!-- <button class="closeContextSelect" @click="fieldBtnContextMenuOpen = false">X</button> -->
       </div>
 
       <table>
@@ -270,9 +239,6 @@
               }"
               v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
             ></button>
-            <!-- <span style="display: inline-block; height: 100%; text-align: left;align-content:center;">
-                {{ sitzplaetze[x.toString() + "," + y.toString()].name }}
-              </span> -->
           </td>
         </tr>
       </table>
@@ -283,5 +249,4 @@
 
 <script lang="ts" src="@/Sitzplatzplaner.ts" />
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped src="@/style.css" />

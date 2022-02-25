@@ -264,7 +264,6 @@ export class Algo2 {
         });
         console.clear();
         console.log("Joshua, das ist Florians Algorithmus")
-        console.log("Geh in Sitzplatzplaner.ts Z.274")
         const result = this.recSolve(studentOrder, freeSeats); //slice to copy
         if (!result) alert("Dieser Plan ist mit den gegebenen Präferenzen nicht möglich.");
     }
