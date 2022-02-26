@@ -6,7 +6,7 @@ import compute from "./helper/Algorithm";
 import {Algo} from "./helper/Algo";
 import { Algo2 } from "./helper/Algo2";
 
-import { toBlob, toPng, toJpeg } from 'html-to-image';
+import { toBlob, toPng, toJpeg, toCanvas } from 'html-to-image';
 import  download  from 'downloadjs';
 /*  
   + TODO: blaue knöpfe
@@ -52,6 +52,7 @@ export default defineComponent({
       lastTouch: 0,
       loadingDivOpen: false,
       highlightManuallySelected: true,
+      className: "",
       // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
@@ -113,7 +114,7 @@ export default defineComponent({
   methods: {
     downloadPlan()
     {
-      const node = document.getElementById('sitzplan');
+      // const node = document.getElementById('sitzplan');
       // if (node)
       // {
       //   toBlob(node)
@@ -126,12 +127,50 @@ export default defineComponent({
       //     });
       // }
 
-      if (node)
+      // if (node)
+      // {
+        
+      //   toPng(node, { pixelRatio: .95 })
+      //   .then(function (dataUrl) {
+      //     download(dataUrl, 'Sitzplan-' + new Date(Date.now()).toLocaleDateString() + ".png");
+      //   });
+      // }
+      const tafel = document.getElementById('tafel');
+      if (tafel)
       {
-        toPng(node, { pixelRatio: .95 })
-        .then(function (dataUrl) {
-          download(dataUrl, 'Sitzplan-' + new Date(Date.now()).toLocaleDateString() + ".png");
-        });
+        if (this.className.trim() != "")
+        {
+          tafel.innerText = this.className;
+        }
+        const node = document.getElementById('sitzplan');
+        let cn = this.className; // needed in function below, access via "this" is not possible there
+        if (node)
+        {
+          toCanvas(node)
+            .then(function (canvas)
+            {
+              // inspired by https://stackoverflow.com/a/27644822
+              const ctx = canvas.getContext("2d");
+              if (ctx)
+              {
+                // convert color to grayscale
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                for (let i = 0; i < data.length; i += 4)
+                {
+                  // make the r,g,b components of this pixel == the average of r,g,b
+                  data[i + 0] = data[i + 1] = data[i + 2] = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                }
+                ctx.putImageData(imageData, 0, 0);
+              
+                const link = document.createElement('a');
+                if (cn.trim() != "") { cn += "-";}
+                link.download = 'Sitzplan-' + cn + new Date(Date.now()).toLocaleDateString() + ".png";
+                link.href = canvas.toDataURL()
+                link.click();
+              }
+            }).then(() => tafel.innerText = "TAFEL");
+        }
       }
     },
     onFieldClick(x: number, y: number) {
@@ -402,15 +441,14 @@ export default defineComponent({
     },
     loadNamesFromFile(data: string) {
       const lines = data.split("\n").filter((x) => x !== null && x !== "");
-      let courseName: string;
       this.studentFieldValue = "";
       for (let i = 0; i < lines.length; i++) {
         if (i == 0) {
-          courseName = lines[i].split(";").filter((x) => x !== null && x !== "")[0];
+          this.className = lines[i].split(RegExp(";|,")).filter((x) => x !== null && x !== "")[0];
         } else if (i > 1) {
           let name: string;
-          name = lines[i].split(";")[2].replace(/"/g,"") + " ";
-          name += lines[i].split(";")[1].replace(/"/g,"") + "\n";
+          name = lines[i].split(RegExp(";|,"))[2].replace(/"/g,"") + " ";
+          name += lines[i].split(RegExp(";|,"))[1].replace(/"/g,"") + "\n";
           if (name.trim().length > 0) {
             this.studentFieldValue += name;
           }

@@ -31,6 +31,7 @@
         </button>
         <transition name="openTransition">
           <div v-if="studentFieldVisible" class="studentFieldDiv">
+            <input class="className" type="text" placeholder="Name der Klasse" v-model="className"/>
             <textarea v-if="studentFieldVisible" class="studentField" v-model="studentFieldValue" placeholder="Name 1" @blur="checkForDoubleNames"> </textarea>
             <input type="file" accept="text/csv,application/csv" id="fileInputThingy" @change="loadStudentFile($event)" />
             <button class="fileInputThingy">
@@ -178,6 +179,11 @@
       <button @click="computePlan" class="btn submit">Plan erstellen</button>
       <button @click="resetNamesOnPlan" class="btn submit">Namen zurücksetzen</button>
       <button @click="downloadPlan" class="btn submit">Bild herunterladen</button>
+      <form action="mailto:Florik3ks@gmail.com">
+        <button class="btn submit" type="submit" style="font-size:medium;">
+            Feedback / Fragen / Fehler ?
+        </button>
+      </form>
       <span class="credits creditsWrap"
         >{{ "\n" }}Entwickelt von: {{ "\n" }}
         <a class="credits creditsA" href="https://github.com/Florik3ks" target="_blank">Florian E.</a>
@@ -192,7 +198,7 @@
 
     <div id="sitzplan">
     <div class="tafelDivOuter">
-      <div class="tafelDivInner">TAFEL</div>
+      <div class="tafelDivInner" id="tafel" >TAFEL</div>
     </div>
     <div class="sitzplatzdiv">
       <div class="fieldBtnContextMenuDiv" v-if="fieldBtnContextMenuOpen" v-on:blur="fieldBtnContextMenuOpen = false" :style="{ top: contextMenuTop, left: contextMenuLeft }">
@@ -220,7 +226,7 @@
             @contextmenu.prevent
             :style="{
               height: 85 / parseInt(gridHeight) + 'vh',
-              border: !isMarked(x, y) ? 'lightgrey 1px solid' : 'black 1px solid',
+              border: !isMarked(x, y) ? 'lightgrey 2px solid' : 'black 1px solid',
 
             }"
           >
