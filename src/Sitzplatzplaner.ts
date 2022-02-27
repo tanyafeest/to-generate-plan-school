@@ -281,6 +281,23 @@ export default defineComponent({
           }
           break;
         case 2:
+          this.gridWidth = 9;
+          this.gridHeight = 7;
+          for (let y = 0; y < 7; y++) {
+            for (let x = 1; x < 8; x++) {
+              if ([1, 2, 5, 6].includes(x) && y < 3)
+              {
+                this.onFieldClick(x, y);
+              }
+              else if ([2, 3, 6, 7].includes(x) && y > 3)
+              {
+                this.onFieldClick(x, y);
+              }
+            }
+            
+          }
+          break;
+        case 3:
           this.gridWidth = 5;
           this.gridHeight = 5;
           break;
