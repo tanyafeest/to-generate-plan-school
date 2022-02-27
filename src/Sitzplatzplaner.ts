@@ -43,7 +43,7 @@ export default defineComponent({
       firstRowRules: [] as string[],
       notBackRules: [] as string[],
       isMouseDown: false,
-      presetCount: 3,
+      presetCount: 4,
       presetPageOpen: false,
       fieldBtnContextMenuOpen: false,
       contextMenuTop: "0px",
