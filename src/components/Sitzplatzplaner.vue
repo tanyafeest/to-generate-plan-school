@@ -179,7 +179,7 @@
       <button @click="computePlan" class="btn submit">Plan erstellen</button>
       <button @click="resetNamesOnPlan" class="btn submit">Namen zurücksetzen</button>
       <button @click="downloadPlan" class="btn submit">Bild herunterladen</button>
-      <form action="mailto:Florik3ks@gmail.com">
+      <form action="mailto:Florik3ks@gmail.com" target="_blank">
         <button class="btn submit" type="submit" style="font-size:medium;">
             Feedback / Fragen / Fehler ?
         </button>

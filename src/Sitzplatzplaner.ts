@@ -6,16 +6,9 @@ import compute from "./helper/Algorithm";
 import {Algo} from "./helper/Algo";
 import { Algo2 } from "./helper/Algo2";
 
-import { toBlob, toPng, toJpeg, toCanvas } from 'html-to-image';
-import  download  from 'downloadjs';
-/*  
-  + TODO: blaue knöpfe
-  + vorlagenknopf
-? möglichst nach vorne fixen
-  + nicht nach hinten
-  + manuell zuweisen
+import { /*toBlob, toPng, toJpeg,*/ toCanvas } from 'html-to-image';
+// import  download  from 'downloadjs';
 
-*/
 
 export default defineComponent({
   name: "Sitzplatzplaner",
@@ -199,6 +192,7 @@ export default defineComponent({
     },
     touchend(e: Event, x: number, y: number)
     {
+      // needed for iOS safari devices, context menu trigger doesnt work there
       if (Date.now() - this.lastTouch > 200 && !this.fieldBtnContextMenuOpen)
       {
         this.onFieldContextMenu(e,x,y)
