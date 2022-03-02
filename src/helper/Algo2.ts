@@ -313,13 +313,11 @@ export class Algo2 {
                     students.splice(index, 0, s);
                 }
             }
-            console.log("nani1 " + s.name);
             return false;
         }
         if (students.length == 0) {
             return this.validateFinal(this.students);
         }
-        console.log("nani3 " + students.length);
         return false;
     }
 
@@ -328,13 +326,11 @@ export class Algo2 {
     validateSingleStudent(s: Student, final = false) {
         if (s.frontRow) {
             if (s.getSeat().y != this.firstRow) {
-                console.log("uwu???1");
                 return false;
             }
         }
         if (s.notBackOfTheRoom) {
             if (s.getSeat().y == this.lastRow) {
-                console.log("uwu???2");
                 return false;
             }
         }
@@ -361,7 +357,6 @@ export class Algo2 {
             if (sNearby.seated) {
                 freeNeighbourSeatsNeeded--;
                 if (!this.isClose(sNearby.getSeat().x, sNearby.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                    console.log("uwu???3");
                     return false;
                 }
             }
@@ -374,7 +369,6 @@ export class Algo2 {
         for (const sAvoid of s.avoid) {
             if (sAvoid.seated) {
                 if (this.isClose(sAvoid.getSeat().x, sAvoid.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                    console.log("uwu???4");
                     return false;
                 }
             }
@@ -388,13 +382,11 @@ export class Algo2 {
 
             if (s.frontRow) {
                 if (s.getSeat().y != this.firstRow) {
-                    console.log("uwu1");
                     return false;
                 }
             }
             if (s.notBackOfTheRoom) {
                 if (s.getSeat().y == this.lastRow) {
-                    console.log("uwu2");
                     return false;
                 }
             }
@@ -410,7 +402,6 @@ export class Algo2 {
             for (const sNearby of s.sitWith) {
                 if (sNearby.seated || allSitWithNeedToBeSeated) {
                     if (!this.isClose(sNearby.getSeat().x, sNearby.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                        console.log("uwu3");
                         return false;
                     }
                 }
@@ -419,7 +410,6 @@ export class Algo2 {
             for (const sAvoid of s.avoid) {
                 if (sAvoid.seated) {
                     if (this.isClose(sAvoid.getSeat().x, sAvoid.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                        console.log("uwu4");
                         return false;
                     }
                 }
@@ -430,35 +420,28 @@ export class Algo2 {
     validateFinal(students: Student[]) {
         for (const s of students) {
             if (!s.seated) {
-                // console.log(s.name);
-                console.log("uwu5");
                 return false;
             }
 
             for (const sNearby of s.sitWith) {
                 if (!this.isClose(sNearby.getSeat().x, sNearby.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                    // console.log(s.name + "," + sNearby.name);
-                    console.log("uwu6");
                     return false;
                 }
             }
 
             for (const sAvoid of s.avoid) {
                 if (this.isClose(sAvoid.getSeat().x, sAvoid.getSeat().y, s.getSeat().x, s.getSeat().y)) {
-                    console.log("uwu7");
                     return false;
                 }
             }
 
             if (s.frontRow) {
                 if (s.getSeat().y != this.firstRow) {
-                    console.log("uwu8");
                     return false;
                 }
             }
             if (s.notBackOfTheRoom) {
                 if (s.getSeat().y == this.lastRow) {
-                    console.log("uwu9");
                     return false;
                 }
             }

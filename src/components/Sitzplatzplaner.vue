@@ -172,6 +172,10 @@
               <input type="checkbox" style="height:20px;width:20px;vertical-align: middle;" v-model="highlightManuallySelected"/>
                <span style="vertical-align: middle;">Manuell ausgewählte Schüler hervorheben</span>
             </p>
+            <p style="display:inline-block; padding-right: 10px;">
+              <input type="checkbox" style="height:20px;width:20px;vertical-align: middle;" v-model="downloadPlanFromTeacherPerspective"/>
+               <span style="vertical-align: middle;">Plan aus Lehrerperspektive herunterladen</span>
+            </p>
           </div>
         </transition>
       </div>
@@ -198,7 +202,7 @@
 
     <div id="sitzplan">
     <div class="tafelDivOuter">
-      <div class="tafelDivInner" id="tafel" >TAFEL</div>
+      <div class="tafelDivInner" :class="rotateText ? 'rotate' : ''" id="tafel" >TAFEL</div>
     </div>
     <div class="sitzplatzdiv">
       <div class="fieldBtnContextMenuDiv" v-if="fieldBtnContextMenuOpen" v-on:blur="fieldBtnContextMenuOpen = false" :style="{ top: contextMenuTop, left: contextMenuLeft }">
@@ -233,6 +237,7 @@
             <button
               :key="sitzplaetze"
               class="fieldBtn"
+              
               @mousedown.left="onFieldClick(x, y)"
               @mouseenter="onFieldClickWhenMouseIsDown(x, y)"
               @contextmenu.prevent="onFieldContextMenu($event, x,y)"
@@ -243,8 +248,11 @@
                 'background-color': isMarked(x, y) ? (isManuallySelected(x,y) ? highlightManuallySelected ? 'skyblue' : 'lightblue' : 'lightblue') : 'white',
                 border: isMarked(x, y) ? 'black 2px solid' : 'none',
               }"
-              v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
-            ></button>
+              
+            ><p
+            style="font-size:medium;"
+            v-text="sitzplaetze[x.toString() + ',' + y.toString()].name"
+            :class="rotateText ? 'rotate' : ''"></p> </button>
           </td>
         </tr>
       </table>

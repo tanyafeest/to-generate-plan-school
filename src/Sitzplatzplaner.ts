@@ -46,6 +46,8 @@ export default defineComponent({
       loadingDivOpen: false,
       highlightManuallySelected: true,
       className: "",
+      rotateText: false,
+      downloadPlanFromTeacherPerspective: true,
       // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
@@ -135,8 +137,16 @@ export default defineComponent({
         {
           tafel.innerText = this.className;
         }
+        if (this.downloadPlanFromTeacherPerspective)
+        {
+          this.rotateText = true;
+        }
         const node = document.getElementById('sitzplan');
-        let cn = this.className; // needed in function below, access via "this" is not possible there
+
+        // needed in .then function below, access via "this" is not possible there
+        let className = this.className;
+        const downloadPlanFromTeacherPerspective = this.downloadPlanFromTeacherPerspective;
+
         if (node)
         {
           toCanvas(node)
@@ -154,15 +164,34 @@ export default defineComponent({
                   // make the r,g,b components of this pixel == the average of r,g,b
                   data[i + 0] = data[i + 1] = data[i + 2] = (data[i] + data[i + 1] + data[i + 2]) / 3;
                 }
-                ctx.putImageData(imageData, 0, 0);
-              
+                let originCanvas = canvas;
+                if (downloadPlanFromTeacherPerspective)
+                {
+                  const canvas2 = document.createElement('canvas');
+                  originCanvas = canvas2;
+                  canvas2.height = canvas.height;
+                  canvas2.width = canvas.width;
+                  const ctx2 = canvas2.getContext("2d");
+                  if (ctx2)
+                  {
+                    ctx2.translate(canvas.width, canvas.height);
+                    ctx2.rotate(Math.PI);
+                    ctx2.drawImage(canvas, 0, 0);
+
+                  }
+                }
+
                 const link = document.createElement('a');
-                if (cn.trim() != "") { cn += "-";}
-                link.download = 'Sitzplan-' + cn + new Date(Date.now()).toLocaleDateString() + ".png";
-                link.href = canvas.toDataURL()
+                if (className.trim() != "") { className += "-"; }
+                link.download = 'Sitzplan-' + className + new Date(Date.now()).toLocaleDateString() + ".png";
+                link.href = originCanvas.toDataURL()
                 link.click();
               }
-            }).then(() => tafel.innerText = "TAFEL");
+            }).then(() =>
+            {
+              tafel.innerText = "TAFEL";
+              this.rotateText = false;
+            });
         }
       }
     },
@@ -333,7 +362,8 @@ export default defineComponent({
         this.notBackRules.push(value);
       }
     },
-    computePlan() {
+    computePlan()
+    {
       console.log("cmpPLan");
       this.deleteUncompleteRules();
       this.resetNamesOnPlan(true);
@@ -344,8 +374,9 @@ export default defineComponent({
         return;
       }
       this.loadingDivOpen = true;
-      
-      // this.$forceUpdate();
+    
+
+      this.$forceUpdate();
       this.$nextTick(() => {
         // compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules(), this.algorithmRandomness);
         new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();

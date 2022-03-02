@@ -3,6 +3,19 @@
     color: black;
 }
 
+.rotate{
+    -webkit-transform: rotate(180deg); /* WebKit */
+    -moz-transform: rotate(180deg); /* Mozilla */
+    -o-transform: rotate(180deg); /* Opera */
+    -ms-transform: rotate(180deg); /* Internet Explorer */
+    transform: rotate(180deg); /* CSS3 */
+
+    /* -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg); */
+}
+
 .presetDiv {
     position: fixed;
     z-index: 1;
