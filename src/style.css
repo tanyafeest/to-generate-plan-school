@@ -26,7 +26,7 @@
     height: 100%;
     overflow: auto;
     background-color: black;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 .presetContent {
     background-color: #fefefe;
@@ -529,6 +529,20 @@ input[type="file"]::file-selector-button:hover {
 .creditsA:hover {
     text-decoration: underline;
 }
+.loadingDiv{
+    transition: .5s;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 /* .openTransition-enter-active {
   transition: height 0.5s ease-out;
 }

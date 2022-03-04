@@ -1,10 +1,14 @@
-import { defineComponent } from "vue";
+import { defineComponent, setTransitionHooks } from "vue";
 import { Sitzplatz } from "@/helper/Sitzplatz";
 import { Rule } from "./helper/Rule";
 import { Student } from "./helper/Student";
+
 import compute from "./helper/Algorithm";
 import {Algo} from "./helper/Algo";
 import { Algo2 } from "./helper/Algo2";
+
+// import { sendMessage } from './helper/WorkerHelper';
+import AlgorithmWorker from '@/AlgoWorker';
 
 import { /*toBlob, toPng, toJpeg,*/ toCanvas } from 'html-to-image';
 // import  download  from 'downloadjs';
@@ -13,7 +17,8 @@ import { /*toBlob, toPng, toJpeg,*/ toCanvas } from 'html-to-image';
 export default defineComponent({
   name: "Sitzplatzplaner",
   props: {},
-  data() {
+  data()
+  {
     const maxGridWidth = 15;
     const maxGridHeight = 15;
     return {
@@ -48,15 +53,41 @@ export default defineComponent({
       className: "",
       rotateText: false,
       downloadPlanFromTeacherPerspective: true,
+      algorithmRunning: false,
       // sitzplaetze2: this.instantiateList(maxGridWidth, maxGridHeight) as Sitzplatz[],
       sitzplaetze: this.instantiateDict(maxGridWidth, maxGridHeight),
     };
   },
+  mounted() {
+    AlgorithmWorker.worker.onmessage = event =>
+    {
+      console.log("RECEIVED");
+      if (event.data.done)
+      {
+        if (event.data.seats)
+        {
+          console.log(event.data.seats);
+          event.data.seats.forEach((seat: Sitzplatz) => {
+            this.sitzplaetze[seat.x + "," + seat.y] = seat;
+          });
+        }
+        this.loadingDivOpen = false;
+        this.algorithmRunning = false;
+      }
+      if (event.data.alert)
+      {
+        alert(event.data.message);
+      }
+    }
+  },
   watch: {
     avoidRules: {
-      handler() {
-        for (let index = 0; index < this.avoidRules.length; index++) {
-          if (this.avoidRules[index].student1 == this.avoidRules[index].student2 && this.avoidRules[index].student1 != "") {
+      handler()
+      {
+        for (let index = 0; index < this.avoidRules.length; index++)
+        {
+          if (this.avoidRules[index].student1 == this.avoidRules[index].student2 && this.avoidRules[index].student1 != "")
+          {
             this.avoidRules[index].student2 = "";
           }
         }
@@ -64,16 +95,20 @@ export default defineComponent({
       deep: true,
     },
     nearbyRules: {
-      handler() {
-        for (let index = 0; index < this.nearbyRules.length; index++) {
-          if (this.nearbyRules[index].student1 == this.nearbyRules[index].student2 && this.nearbyRules[index].student1 != "") {
+      handler()
+      {
+        for (let index = 0; index < this.nearbyRules.length; index++)
+        {
+          if (this.nearbyRules[index].student1 == this.nearbyRules[index].student2 && this.nearbyRules[index].student1 != "")
+          {
             this.nearbyRules[index].student2 = "";
           }
         }
       },
       deep: true,
     },
-    studentFieldValue() {
+    studentFieldValue()
+    {
       const names: string[] = this.getNames();
       // check rules
       [this.firstRowRules, this.notBackRules].forEach((rules) =>
@@ -87,9 +122,12 @@ export default defineComponent({
         }
       });
 
-      [this.avoidRules, this.nearbyRules].forEach((rules) => {
-        for (let i = rules.length - 1; i >= 0; i--) {
-          if (!(names.includes(rules[i].student1) && names.includes(rules[i].student2))) {
+      [this.avoidRules, this.nearbyRules].forEach((rules) =>
+      {
+        for (let i = rules.length - 1; i >= 0; i--)
+        {
+          if (!(names.includes(rules[i].student1) && names.includes(rules[i].student2)))
+          {
             rules.splice(i, 1);
           }
         }
@@ -107,29 +145,14 @@ export default defineComponent({
     },
   },
   methods: {
+    // cancelAlgorithm()
+    // {
+    //   console.log(AlgorithmWorker.worker);
+    //   this.algorithmRunning = false;
+    //   this.loadingDivOpen = false;
+    // },
     downloadPlan()
     {
-      // const node = document.getElementById('sitzplan');
-      // if (node)
-      // {
-      //   toBlob(node)
-      //     .then(function (blob)
-      //     {
-      //       if (blob)
-      //       {
-      //         saveAs(blob, 'my-node.png');
-      //       }
-      //     });
-      // }
-
-      // if (node)
-      // {
-        
-      //   toPng(node, { pixelRatio: .95 })
-      //   .then(function (dataUrl) {
-      //     download(dataUrl, 'Sitzplan-' + new Date(Date.now()).toLocaleDateString() + ".png");
-      //   });
-      // }
       const tafel = document.getElementById('tafel');
       if (tafel)
       {
@@ -195,7 +218,8 @@ export default defineComponent({
         }
       }
     },
-    onFieldClick(x: number, y: number) {
+    onFieldClick(x: number, y: number)
+    {
       const platz: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
       platz.marked = !platz.marked;
 
@@ -205,8 +229,10 @@ export default defineComponent({
         platz.manuallySelected = false;
       }
     },
-    onFieldClickWhenMouseIsDown(x: number, y: number) {
-      if (this.isMouseDown) {
+    onFieldClickWhenMouseIsDown(x: number, y: number)
+    {
+      if (this.isMouseDown)
+      {
         this.onFieldClick(x, y);
       }
     },
@@ -214,7 +240,7 @@ export default defineComponent({
     {
       e.preventDefault();
     },
-    touchstart(x: number, y : number)
+    touchstart(x: number, y: number)
     {
       console.log("a")
       this.lastTouch = Date.now();
@@ -224,11 +250,11 @@ export default defineComponent({
       // needed for iOS safari devices, context menu trigger doesnt work there
       if (Date.now() - this.lastTouch > 200 && !this.fieldBtnContextMenuOpen)
       {
-        this.onFieldContextMenu(e,x,y)
+        this.onFieldContextMenu(e, x, y)
       }
       this.lastTouch = Date.now();
     },
-    onFieldContextMenu(e : any, x: number, y : number)
+    onFieldContextMenu(e: any, x: number, y: number)
     {
       let w = e.x;
       let h = e.y;
@@ -255,7 +281,7 @@ export default defineComponent({
         document.getElementById('fieldSelectionID')?.focus()
       });
     },
-    manuallySelectStudent(e : any)
+    manuallySelectStudent(e: any)
     {
       if (e.trim() != "")
       {
@@ -269,20 +295,25 @@ export default defineComponent({
           }
         }
         this.sitzplaetze[this.contextMenuOpenedBy].manuallySelected = true;
-      }else{this.sitzplaetze[this.contextMenuOpenedBy].manuallySelected = false;}
+      } else { this.sitzplaetze[this.contextMenuOpenedBy].manuallySelected = false; }
       this.sitzplaetze[this.contextMenuOpenedBy].name = e;
       this.sitzplaetze[this.contextMenuOpenedBy].marked = true;
     },
-    setPreset(i: number) {
+    setPreset(i: number)
+    {
       this.presetPageOpen = false;
       this.sitzplaetze = this.instantiateDict(this.maxGridWidth, this.maxGridHeight);
-      switch (i) {
+      switch (i)
+      {
         case 0:
           this.gridWidth = 9;
           this.gridHeight = 7;
-          for (let y = 0; y < 7; y += 2) {
-            for (let x = 0; x < 9; x++) {
-              if (x != 4) {
+          for (let y = 0; y < 7; y += 2)
+          {
+            for (let x = 0; x < 9; x++)
+            {
+              if (x != 4)
+              {
                 this.onFieldClick(x, y);
               }
             }
@@ -291,14 +322,18 @@ export default defineComponent({
         case 1:
           this.gridWidth = 7;
           this.gridHeight = 7;
-          for (let y = 0; y < 7; y += 2) {
-            for (let x = 0; x < 7; x++) {
-              if (x != 3) {
+          for (let y = 0; y < 7; y += 2)
+          {
+            for (let x = 0; x < 7; x++)
+            {
+              if (x != 3)
+              {
                 this.onFieldClick(x, y);
               }
             }
           }
-          for (let y = 1; y < 6; y += 2) {
+          for (let y = 1; y < 6; y += 2)
+          {
             this.onFieldClick(0, y);
             this.onFieldClick(6, y);
           }
@@ -306,8 +341,10 @@ export default defineComponent({
         case 2:
           this.gridWidth = 9;
           this.gridHeight = 7;
-          for (let y = 0; y < 7; y++) {
-            for (let x = 1; x < 8; x++) {
+          for (let y = 0; y < 7; y++)
+          {
+            for (let x = 1; x < 8; x++)
+            {
               if ([1, 2, 5, 6].includes(x) && y < 3)
               {
                 this.onFieldClick(x, y);
@@ -328,22 +365,29 @@ export default defineComponent({
           break;
       }
     },
-    addRule(ruleList: Rule[]) {
+    addRule(ruleList: Rule[])
+    {
       ruleList.push(new Rule());
     },
-    deleteRuleAt(i: number, ruleList: Rule[]) {
+    deleteRuleAt(i: number, ruleList: Rule[])
+    {
       ruleList.splice(i, 1);
     },
-    deleteUncompleteRules() {
-      [this.avoidRules, this.nearbyRules].forEach((ruleList) => {
-        for (let i = ruleList.length - 1; i >= 0; i--) {
-          if (ruleList[i].student1 == "" || ruleList[i].student2 == "") {
+    deleteUncompleteRules()
+    {
+      [this.avoidRules, this.nearbyRules].forEach((ruleList) =>
+      {
+        for (let i = ruleList.length - 1; i >= 0; i--)
+        {
+          if (ruleList[i].student1 == "" || ruleList[i].student2 == "")
+          {
             ruleList.splice(i, 1);
           }
         }
       });
     },
-    closeEverythingExcept(except: boolean) {
+    closeEverythingExcept(except: boolean)
+    {
       this.ruleVisible = false;
       this.studentFieldVisible = false;
       this.algorithmSettingsVisible = false;
@@ -351,37 +395,88 @@ export default defineComponent({
       // this.avoidRulesVisible = false;
       return !except;
     },
-    addFirstRow(value: string) {
-      if (!this.firstRowRules.includes(value)) {
+    addFirstRow(value: string)
+    {
+      if (!this.firstRowRules.includes(value))
+      {
         this.firstRowRules.push(value);
       }
     },
     addNotBackRow(value: string)
     {
-      if (!this.notBackRules.includes(value)) {
+      if (!this.notBackRules.includes(value))
+      {
         this.notBackRules.push(value);
       }
     },
-    computePlan()
+    async computePlan()
     {
       console.log("cmpPLan");
       this.deleteUncompleteRules();
       this.resetNamesOnPlan(true);
-      // new Algo(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
       if (!this.checkForImpossibleRules())
       {
         alert("Es überlappen sich Regeln, sodass Schüler sowohl nebeneinander als auch nicht nebeneinander sitzen sollen.")
         return;
       }
-      this.loadingDivOpen = true;
-    
+      this.algorithmRunning = true;
+      
+      // this.$forceUpdate();
+      // this.$nextTick(() => {
+      //   // compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules(), this.algorithmRandomness);
+      //   new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
+      // });
+      // this.loadingDivOpen = false;
 
-      this.$forceUpdate();
-      this.$nextTick(() => {
-        // compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules(), this.algorithmRandomness);
-        new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
+      AlgorithmWorker.send({
+        avoidRules: this.ruleArrayToStringArray(this.avoidRules),
+        sitWith: this.ruleArrayToStringArray(this.nearbyRules),
+        notBack: this.cloneArray(this.notBackRules),
+        front: this.cloneArray(this.firstRowRules),
+        students: this.getNames(),
+        seats: this.generateNewSeatArray(this.getUsedFieldsToComputePlan()),
+        randomness: this.algorithmRandomness
       });
-      this.loadingDivOpen = false;
+      setTimeout(() =>
+      {
+        console.log("CHECK")
+        if (this.algorithmRunning)
+        {
+          this.loadingDivOpen = true;
+        }
+      }, 1000);
+    },
+    ruleArrayToStringArray(rules: Rule[])
+    {
+      const result = [] as string[][];
+      rules.forEach(r => {
+        result.push([r.student1, r.student2]);
+      });
+      return result;
+    },
+    cloneArray(arr: any[])
+    {
+      const new_ = [] as any[];
+      arr.forEach(element => {
+        new_.push(element);
+      });
+      return new_;
+    },
+    generateNewSeatArray(origin: Sitzplatz[])
+    {
+      const newSeats = [] as Sitzplatz[];
+      origin.forEach(s => {
+        const newSeat = new Sitzplatz(s.x, s.y, s.marked);
+        newSeat.manuallySelected = s.manuallySelected;
+        newSeat.name = s.name;
+        newSeats.push(newSeat);
+      });
+      return newSeats;
+    },
+    runAlgorithm()
+    {
+      console.log("aaa");
+      new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
     },
     checkForImpossibleRules()
     {
@@ -421,14 +516,7 @@ export default defineComponent({
             return;
           }
         });
-        
-        // check for double student name
-        // studentList.forEach(s => {
-        //   while (s.name == student)
-        //   {
-        //     student += "1";
-        //   }
-        // });
+
 
         const s = new Student(student, [], []);
         s.frontRow = firstRow;

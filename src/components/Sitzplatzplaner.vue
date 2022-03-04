@@ -7,9 +7,13 @@
       </button>
     </div>
   </div>
+  <transition name="fade">
   <div class="presetDiv" v-if="loadingDivOpen" >
+    <p style="color:white"> Dieser Plan scheint recht kompliziert zu sein, bitte haben Sie einen Moment Geduld..</p>
     <div class="lds-default" ><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  <!-- <br/><button class="btn" @click="cancelAlgorithm"> Berechnung abbrechen </button> -->
   </div>
+  </transition>
   <div @mousedown.left="isMouseDown = true" @mouseup.left="isMouseDown = false" id="wrapperDiv">
     <div class="sideDiv">
       <div class="sliderDiv">

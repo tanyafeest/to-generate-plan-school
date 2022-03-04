@@ -8,9 +8,13 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true,    
     "sourceMap": true,
     "baseUrl": ".",
+
+    "allowJs": true,
+    "outDir": "dist",
+
     "types": [
       "webpack-env"
     ],
@@ -23,7 +27,8 @@
       "esnext",
       "dom",
       "dom.iterable",
-      "scripthost"
+      "scripthost",
+      "WebWorker"
     ]
   },
   "include": [
@@ -31,7 +36,9 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+  
+    "src/helper/*.js", "src/helper/WorkerHelper.js", "src/AlgoWorker/AlgorithmWorker.js", "src/AlgoWorker/index.js",
   ],
   "exclude": [
     "node_modules"

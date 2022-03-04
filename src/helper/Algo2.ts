@@ -1,7 +1,5 @@
 import { Sitzplatz } from "./Sitzplatz";
 import { Student } from "./Student";
-import { StudentRule } from "./StudentRule";
-import { Rule } from "./Rule";
 export class Algo2 {
     // TODO: ~ L 37: benötigte Reihenanzahl anhand des y-wertes bestimmen
     firstRow: number;
@@ -17,7 +15,9 @@ export class Algo2 {
     // avoidRules = [] as StudentRule[];
 
     // constructor(seats: Sitzplatz[], students: Student[], avoidRules: Rule[], sitWithRules: Rule[], frontRow: string[], notBackRow: string[]) {
-    constructor(seats: Sitzplatz[], students: Student[]) {
+    constructor(seats: Sitzplatz[], students: Student[])
+    {
+        console.log(seats);
         this.firstRow = this.getFirstRow(seats);
         this.lastRow = this.getLastRow(seats);
         this.students = students;
@@ -46,32 +46,6 @@ export class Algo2 {
                 });
             }
         });
-        // // set sitWith rules
-        // sitWithRules.forEach((element) => {
-        //     const s1 = this.findStudentByName(element.student1);
-        //     const s2 = this.findStudentByName(element.student2);
-        //     if (s1 && s2) {
-        //         this.sitWithRules.push(new StudentRule(s1, s2));
-        //     }
-        // });
-        // // set avoid rules
-        // avoidRules.forEach((element) => {
-        //     const s1 = this.findStudentByName(element.student1);
-        //     const s2 = this.findStudentByName(element.student2);
-        //     if (s1 && s2) {
-        //         this.avoidRules.push(new StudentRule(s1, s2));
-        //     }
-        // });
-        // // set front row rules
-        // frontRow.forEach((element) => {
-        //     const s = this.findStudentByName(element);
-        //     if (s) this.frontRowStudents.push(s);
-        // });
-        // // set notBackRow rules
-        // notBackRow.forEach((element) => {
-        //     const s = this.findStudentByName(element);
-        //     if (s) this.notBackRowStudents.push(s);
-        // });
     }
 
     //#region debug functions
@@ -170,12 +144,14 @@ export class Algo2 {
     compute()
     {
         if (this.seats.length == 0) {
-            alert("Es sind keine Sitzplätze ausgewählt.");
-            return;
+            // alert("Es sind keine Sitzplätze ausgewählt.");
+            // return;
+            return { done: true, error: true, message: "Es sind keine Sitzplätze ausgewählt" };
         }
         if (this.seats.length < this.students.length) {
-            alert("Es gibt weniger Plätze als Schüler");
-            return;
+            // alert("Es gibt weniger Plätze als Schüler");
+            // return;
+            return { done: true, error: true, message: "Es gibt weniger Plätze als Schüler" };
         }
         
         // const studentOrder = [] as Student[];
@@ -249,23 +225,28 @@ export class Algo2 {
                 }
             });
             const frontRow = this.seats.splice(0, frontRowCount);
-            this.shuffleArray(frontRow)
+            this.shuffleArray(frontRow);
             this.seats = frontRow.concat(this.seats);
             // const frontRow = studentOrder.splice(0, frontRowCount);
             // this.shuffleArray(frontRow);
             // studentOrder = frontRow.concat(studentOrder);
         }
-
-
+        console.log(this.seats.length);
 
         const freeSeats = [] as Sitzplatz[];
         this.seats.forEach((seat) => {
             if (seat.name == "") freeSeats.push(seat);
         });
+        console.log(freeSeats.length);
+        this.shuffleArray(freeSeats);
         console.clear();
         console.log("Joshua, das ist Florians Algorithmus")
         const result = this.recSolve(studentOrder, freeSeats); //slice to copy
-        if (!result) alert("Dieser Plan ist mit den gegebenen Präferenzen nicht möglich.");
+        // if (!result) alert("Dieser Plan ist mit den gegebenen Präferenzen nicht möglich.");
+            
+        if (!result) return { done: true, error: true, message: "Ein Plan ist mit den gegebenen Präferenzen nicht möglich." };
+        
+        return { done: true, error: false, seats: this.seats };
     }
 
     recSolve(students: Student[], freeSeats: Sitzplatz[], lastStudent?: Student, debug = false) {
