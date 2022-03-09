@@ -27,7 +27,7 @@ export default defineComponent({
       gridWidth: 5,
       gridHeight: 5,
       sideWidth: 25,
-      algorithmRandomness: 1,
+      algorithmRandomness: 2,
       studentFieldVisible: true,
       ruleVisible: false,
       algorithmSettingsVisible: false,
@@ -61,12 +61,10 @@ export default defineComponent({
   mounted() {
     AlgorithmWorker.worker.onmessage = event =>
     {
-      console.log("RECEIVED");
       if (event.data.done)
       {
         if (event.data.seats)
         {
-          console.log(event.data.seats);
           event.data.seats.forEach((seat: Sitzplatz) => {
             this.sitzplaetze[seat.x + "," + seat.y] = seat;
           });
@@ -242,7 +240,6 @@ export default defineComponent({
     },
     touchstart(x: number, y: number)
     {
-      console.log("a")
       this.lastTouch = Date.now();
     },
     touchend(e: Event, x: number, y: number)
@@ -411,7 +408,6 @@ export default defineComponent({
     },
     async computePlan()
     {
-      console.log("cmpPLan");
       this.deleteUncompleteRules();
       this.resetNamesOnPlan(true);
       if (!this.checkForImpossibleRules())
@@ -439,7 +435,6 @@ export default defineComponent({
       });
       setTimeout(() =>
       {
-        console.log("CHECK")
         if (this.algorithmRunning)
         {
           this.loadingDivOpen = true;
@@ -472,11 +467,6 @@ export default defineComponent({
         newSeats.push(newSeat);
       });
       return newSeats;
-    },
-    runAlgorithm()
-    {
-      console.log("aaa");
-      new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
     },
     checkForImpossibleRules()
     {

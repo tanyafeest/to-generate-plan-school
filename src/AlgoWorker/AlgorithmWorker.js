@@ -3,7 +3,6 @@ import { Sitzplatz } from "@/helper/Sitzplatz";
 import { Student } from "@/helper/Student";
 import { Rule } from "@/helper/Rule";
 addEventListener("message", (event) => {
-    console.log(event.data);
     const avoidRules = createRuleFromStringArray(event.data.message.avoidRules);
     const sitWith = createRuleFromStringArray(event.data.message.sitWith);
     const notBack = event.data.message.notBack;
@@ -12,8 +11,8 @@ addEventListener("message", (event) => {
     const names = event.data.message.students;
     const students = createStudentsFromRules(names, front, notBack, avoidRules, sitWith);
     let seats = event.data.message.seats;
-    const randomness = event.data.message.randomneFss;
-    const result = new Algo2(seats, students).compute();
+    const randomness = event.data.message.randomness;
+    const result = new Algo2(seats, students, randomness).compute();
     if (result.done) {
         if (result.error) {
             postMessage({ alert: true, message: result.message });

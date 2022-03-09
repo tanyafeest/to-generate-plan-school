@@ -1,7 +1,7 @@
 import { Sitzplatz } from "./Sitzplatz";
 import { Student } from "./Student";
 export class Algo2 {
-    // TODO: ~ L 37: benötigte Reihenanzahl anhand des y-wertes bestimmen
+    // TODO: numberOfFrontSeatsNeeded nutzen
     firstRow: number;
     lastRow: number;
     seats: Sitzplatz[];
@@ -9,19 +9,15 @@ export class Algo2 {
     studentsDict: { [id: string]: Student } = {};
     students: Student[];
     numberOfFrontSeatsNeeded = 0;
-    // frontRowStudents = [] as Student[];
-    // notBackRowStudents = [] as Student[];
-    // sitWithRules = [] as StudentRule[];
-    // avoidRules = [] as StudentRule[];
+    randomness: number;
 
-    // constructor(seats: Sitzplatz[], students: Student[], avoidRules: Rule[], sitWithRules: Rule[], frontRow: string[], notBackRow: string[]) {
-    constructor(seats: Sitzplatz[], students: Student[])
+    constructor(seats: Sitzplatz[], students: Student[], randomness: number)
     {
-        console.log(seats);
         this.firstRow = this.getFirstRow(seats);
         this.lastRow = this.getLastRow(seats);
         this.students = students;
         this.seats = seats;
+        this.randomness = randomness;
         // create seats dictionary
         seats.forEach((s) => {
             this.seatsDict[s.x.toString() + "," + s.y.toString()] = s;
@@ -78,9 +74,6 @@ export class Algo2 {
         return this.studentsDict[name];
     }
     findSeatByCoordinates(x: number, y: number) {
-        // for (const seat of this.seats) {
-        //     if (seat.x == x && seat.y == y) return seat;
-        // }
         return this.seatsDict[x.toString() + "," + y.toString()];
     }
     getLastRow(seats: Sitzplatz[]) {
@@ -153,25 +146,6 @@ export class Algo2 {
             // return;
             return { done: true, error: true, message: "Es gibt weniger Plätze als Schüler" };
         }
-        
-        // const studentOrder = [] as Student[];
-        // this.students.forEach(s => {
-        //     if (s.frontRow) studentOrder.push(s);
-        // });
-        // this.students.forEach(s =>
-        // {
-        //     if (!studentOrder.includes(s)) studentOrder.push(s);
-        // });
-
-        // const studentOrder = this.students.slice();
-        // studentOrder.sort((a, b) =>
-        // {
-        //     if (a.frontRow && b.frontRow) return 0;
-        //     else if (a.frontRow) return -1;
-        //     else if (b.frontRow) return 1;
-        //     if(b.sitWith.length - a.sitWith.length == 0) return (Math.floor(Math.random() * 10) % 2 == 0) ? -1 : 1;
-        //     return b.sitWith.length - a.sitWith.length;
-        // });
         let freeStudents = this.students.slice();
         const frontRowStudents = [] as Student[];
         const notLastRowStudents = [] as Student[];
@@ -204,8 +178,11 @@ export class Algo2 {
             }
         }
         hasFixedNeighbours.sort((a, b) => b.sitWith.length - a.sitWith.length);
-        this.shuffleArray(freeStudents);
-        this.shuffleArray(notLastRowStudents);
+        if (this.randomness > 0)
+        {
+            this.shuffleArray(freeStudents);
+            this.shuffleArray(notLastRowStudents);
+        }
         // put students that must not sit in the last row at the beginning of the freeStudenst array
         freeStudents = notLastRowStudents.concat(freeStudents);
 
@@ -214,7 +191,7 @@ export class Algo2 {
         const studentOrder = frontRowStudents.concat(hasFixedNeighbours.concat(freeStudents));
 
         // shuffle students sitting in the first row
-        if (frontRowStudents.length > 0)
+        if (this.randomness > 0 && frontRowStudents.length > 0)
         {
             let frontRowCount = 0;
             this.seats.forEach((s) =>
@@ -231,16 +208,15 @@ export class Algo2 {
             // this.shuffleArray(frontRow);
             // studentOrder = frontRow.concat(studentOrder);
         }
-        console.log(this.seats.length);
 
         const freeSeats = [] as Sitzplatz[];
         this.seats.forEach((seat) => {
             if (seat.name == "") freeSeats.push(seat);
         });
-        console.log(freeSeats.length);
-        this.shuffleArray(freeSeats);
-        console.clear();
-        console.log("Joshua, das ist Florians Algorithmus")
+        if (this.randomness == 2)
+        {
+            this.shuffleArray(freeSeats);
+        }
         const result = this.recSolve(studentOrder, freeSeats); //slice to copy
         // if (!result) alert("Dieser Plan ist mit den gegebenen Präferenzen nicht möglich.");
             
