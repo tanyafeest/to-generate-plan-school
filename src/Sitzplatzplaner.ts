@@ -218,6 +218,8 @@ export default defineComponent({
     },
     onFieldClick(x: number, y: number)
     {
+      if (this.fieldBtnContextMenuOpen) return;
+
       const platz: Sitzplatz = this.sitzplaetze[x.toString() + "," + y.toString()];
       platz.marked = !platz.marked;
 
@@ -417,12 +419,6 @@ export default defineComponent({
       }
       this.algorithmRunning = true;
       
-      // this.$forceUpdate();
-      // this.$nextTick(() => {
-      //   // compute(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules(), this.algorithmRandomness);
-      //   new Algo2(this.getUsedFieldsToComputePlan(), this.createStudentsFromRules()).compute();
-      // });
-      // this.loadingDivOpen = false;
 
       AlgorithmWorker.send({
         avoidRules: this.ruleArrayToStringArray(this.avoidRules),
